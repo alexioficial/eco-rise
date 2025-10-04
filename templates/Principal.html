@@ -6,17 +6,39 @@
 <div class="row">
     <div class="col-12 col-md-10 col-lg-8 mx-auto">
         <div class="card shadow-sm">
-            <div class="card-body">
-                <h1 class="h5 mb-3">Variables de inicio</h1>
-                <p class="text-muted">Configura parámetros iniciales del cultivo. Aquí agregaremos densidad de siembra,
-                    espaciamiento, fechas, etc.</p>
-
-                <div class="d-flex gap-2">
-                    <a class="btn btn-outline-secondary" href="/">Volver</a>
-                    <a class="btn btn-primary" href="/datos-campo">Siguiente</a>
+            <div class="card-body" style="height: 85vh !important;">
+                <div class="row">
+                    <div class="col-6">
+                        <label title="Temperatura del suelo.">Temperatura</label>
+                        <input type="text" id="txt_temperatura_suelo" class="form-control" disabled>
+                    </div>
+                    <div class="col-6">
+                        <!-- TODO poner el "?" con la infografia -->
+                        <label>Tipo de suelo</label>
+                        <select id="ddl_tipo_suelo" class="form-select">
+                            <option value="1">Arenoso</option>
+                            <option value="2">Arcilloso</option>
+                            <option value="3">Limoso</option>
+                            <option value="4">Franco</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <!-- TODO pedirle a gemini que calcule la demanda del producto en base al mercado del pais de donde se pusieron las coordenadas -->
+                        <label>Demanda del producto</label>
+                        <input type="text" id="txt_demanda_producto" class="form-control" disabled>
+                    </div>
+                    <div class="col-6">
+                        <!-- TODO sacar eta vaina de una API de weather -->
+                        <label>Probabilidad de lluvia</label>
+                        <input type="text" id="txt_probabilidad_lluvia" class="form-control" disabled>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/scripts/Principal.js"></script>
 {% endblock %}

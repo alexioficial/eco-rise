@@ -32,18 +32,3 @@ def Inicio():
     if Session.get("iduser") is None:
         return redirect("/Login")
     return redirect("/VariablesDeInicio")
-
-
-@bp.route("/SecurityCheck", methods=["POST"])
-def SecurityCheck():
-    try:
-        data = request.get_json()
-        const_iduser = data["const_iduser"]
-        input_iduser = data["input_iduser"]
-        real_iduser = Session["iduser"]
-        if (const_iduser != input_iduser) or (const_iduser != real_iduser):
-            Session.clear()
-            return tools.msg(1, "Security check failed", redirect__="/Login")
-        return tools.msg()
-    except Exception as e:
-        return tools.msg_err(e)
