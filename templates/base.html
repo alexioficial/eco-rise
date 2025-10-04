@@ -9,6 +9,18 @@
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="icon" href="/static/imgs/bobby.png">
+
+    <style>
+        .la_barra .nav-link i {
+            transition: filter 0.2s ease;
+        }
+
+        .la_barra .nav-link.active i {
+            filter: drop-shadow(0 0 6px rgba(25, 135, 84, 0.85)) drop-shadow(0 0 14px rgba(25, 135, 84, 0.55));
+            -webkit-filter: drop-shadow(0 0 6px rgba(25, 135, 84, 0.85)) drop-shadow(0 0 14px rgba(25, 135, 84, 0.55));
+        }
+    </style>
 </head>
 
 <body class="bg-light">
@@ -17,23 +29,23 @@
     </main>
 
     {% set path = request.path %}
-    <nav class="navbar fixed-bottom navbar-light bg-white border-top">
+    <nav class="la_barra navbar fixed-bottom navbar-light bg-white border-top">
         <div class="container-fluid px-0">
             <div class="d-flex justify-content-around w-100">
                 <a href="/VariablesDeInicio"
-                    class="nav-link text-center d-flex flex-column align-items-center {{ 'active text-primary' if path.startswith('/VariablesDeInicio') else 'text-secondary' }}"
+                    class="nav-link text-center d-flex flex-column align-items-center {{ 'active text-success' if path.startswith('/VariablesDeInicio') else 'text-secondary' }}"
                     aria-label="Variables de inicio">
                     <i class="bi bi-sliders fs-5"></i>
                     <span class="small">Variables</span>
                 </a>
                 <a href="/Principal"
-                    class="nav-link text-center d-flex flex-column align-items-center {{ 'active text-primary' if path == '/Principal' else 'text-secondary' }}"
+                    class="nav-link text-center d-flex flex-column align-items-center {{ 'active text-success' if path == '/Principal' else 'text-secondary' }}"
                     aria-label="Principal">
                     <i class="bi bi-house-door-fill fs-5"></i>
                     <span class="small">Principal</span>
                 </a>
                 <a href="/DatosDeCampo"
-                    class="nav-link text-center d-flex flex-column align-items-center {{ 'active text-primary' if path.startswith('/DatosDeCampo') else 'text-secondary' }}"
+                    class="nav-link text-center d-flex flex-column align-items-center {{ 'active text-success' if path.startswith('/DatosDeCampo') else 'text-secondary' }}"
                     aria-label="Datos de campo">
                     <i class="bi bi-geo-alt fs-5"></i>
                     <span class="small">Campo</span>

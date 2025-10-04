@@ -1,24 +1,39 @@
 {% extends 'base.html' %}
 
-{% block title %}Principal · Farm Navigators{% endblock %}
+{% block title %}Principal{% endblock %}
 
 {% block content %}
+
+<style>
+    .el_logo {
+        width: 70%;
+        margin-bottom: 15px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+
+        filter: drop-shadow(0 0 12px rgba(0, 123, 255, 0.7)) drop-shadow(0 0 24px rgba(0, 123, 255, 0.4));
+        -webkit-filter: drop-shadow(0 0 12px rgba(0, 123, 255, 0.7)) drop-shadow(0 0 24px rgba(0, 123, 255, 0.4));
+    }
+</style>
+
 <div class="row">
     <div class="col-12 col-md-10 col-lg-8 mx-auto">
+        <img src="/static/imgs/logo.png" class="el_logo" alt="Logo">
         <div class="card shadow-sm">
             <div class="card-body">
-                <h1 class="h4 mb-3">Datos principales</h1>
+                <h1 class="h4 mb-3">DATOS PRINCIPALES</h1>
 
                 <form id="form-principal" novalidate>
                     <div class="row g-2 mb-3">
                         <div class="col-6">
-                            <label for="ancho" class="form-label">Ancho (m)</label>
+                            <label for="ancho" class="form-label">ANCHO (m)</label>
                             <input type="number" step="0.01" min="0" class="form-control" id="ancho"
                                 placeholder="Ej: 50" required>
                             <div class="invalid-feedback">Ingresa un ancho válido.</div>
                         </div>
                         <div class="col-6">
-                            <label for="alto" class="form-label">Alto (m)</label>
+                            <label for="alto" class="form-label">ALTO (m)</label>
                             <input type="number" step="0.01" min="0" class="form-control" id="alto" placeholder="Ej: 30"
                                 required>
                             <div class="invalid-feedback">Ingresa un alto válido.</div>
@@ -29,10 +44,9 @@
                         <label for="tipoPlanta" class="form-label">Tipo de planta</label>
                         <select id="tipoPlanta" class="form-select" required>
                             <option value="" selected disabled>Selecciona una opción</option>
-                            <option value="maiz">Maíz</option>
-                            <option value="soja">Soja</option>
-                            <option value="trigo">Trigo</option>
-                            <option value="otro">Otro</option>
+                            <option value="tomate">Tomate</option>
+                            <option value="maiz">Maiz</option>
+                            <option value="lechuga">Lechuga</option>
                         </select>
                         <div class="invalid-feedback">Selecciona un tipo de planta.</div>
                     </div>
@@ -42,21 +56,28 @@
                             <label class="form-label">Coordenadas</label>
                         </div>
                         <div class="col-6">
-                            <input type="text" inputmode="decimal" pattern="-?\\d+(\\.\\d+)?" class="form-control"
-                                id="lat" placeholder="Latitud" required>
+                            <input type="text" inputmode="decimal" class="form-control" id="lat" placeholder="Latitud"
+                                required>
                             <div class="invalid-feedback">Latitud inválida.</div>
                         </div>
                         <div class="col-6">
-                            <input type="text" inputmode="decimal" pattern="-?\\d+(\\.\\d+)?" class="form-control"
-                                id="lng" placeholder="Longitud" required>
+                            <input type="text" inputmode="decimal" class="form-control" id="lng" placeholder="Longitud"
+                                required>
                             <div class="invalid-feedback">Longitud inválida.</div>
                         </div>
                     </div>
-                    <div class="d-flex gap-2 mb-3">
-                        <button type="button" id="btn-geolocate" class="btn btn-outline-primary">Usar mi
-                            ubicación</button>
-                        <button type="submit" class="btn btn-primary">Continuar</button>
+                    <div class="row mb-3">
+                        <div class="col-6 mx-0 pe-1">
+                            <button type="button" id="btn-geolocate" class="btn btn-outline-success">Usar mi
+                                ubicación</button>
+                        </div>
+                        <div class="col-6 mx-0 ps-1">
+                            <button type="button" id="btn-geolocate" class="btn btn-outline-success">Usar otra
+                                ubicación</button>
+                        </div>
+
                     </div>
+                    <button type="submit" class="btn btn-success w-100">Continuar</button>
                     <div id="status" class="small text-muted"></div>
                 </form>
             </div>
