@@ -15,7 +15,12 @@
         filter: drop-shadow(0 0 12px rgba(0, 123, 255, 0.7)) drop-shadow(0 0 24px rgba(0, 123, 255, 0.4));
         -webkit-filter: drop-shadow(0 0 12px rgba(0, 123, 255, 0.7)) drop-shadow(0 0 24px rgba(0, 123, 255, 0.4));
     }
+    /* Alto del mapa en el modal */
+    #map-picker { height: 60vh; }
 </style>
+
+<!-- Leaflet CSS solo para esta página -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 
 <div class="row">
     <div class="col-12 col-md-10 col-lg-8 mx-auto">
@@ -72,7 +77,7 @@
                                 ubicación</button>
                         </div>
                         <div class="col-6 mx-0 ps-1">
-                            <button type="button" id="btn-geolocate" class="btn btn-outline-success">Usar otra
+                            <button type="button" id="btn-pick-location" class="btn btn-outline-success">Usar otra
                                 ubicación</button>
                         </div>
 
@@ -84,15 +89,47 @@
         </div>
     </div>
 </div>
+
+<!-- Modal para seleccionar ubicación en el mapa -->
+<div class="modal fade" id="modalMap" tabindex="-1" aria-labelledby="modalMapLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen-sm-down modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalMapLabel">Selecciona la ubicación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div id="map-picker"></div>
+      </div>
+      <div class="modal-footer d-flex w-100 justify-content-between">
+        <div class="text-muted small" id="picked-preview">Haz clic en el mapa para elegir un punto.</div>
+        <div>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" id="btn-confirm-location">Usar esta ubicación</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
 {% endblock %}
 
 {% block scripts %}
+<!-- Leaflet JS solo para esta página -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
     (() => {
         const form = document.getElementById('form-principal');
         const statusEl = document.getElementById('status');
         const latEl = document.getElementById('lat');
         const lngEl = document.getElementById('lng');
+        const pickBtn = document.getElementById('btn-pick-location');
+        const confirmBtn = document.getElementById('btn-confirm-location');
+        const previewEl = document.getElementById('picked-preview');
+        const modalEl = document.getElementById('modalMap');
+        let modalInstance = null;
+        let map = null;
+        let marker = null;
+        let pickedLatLng = null;
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -108,7 +145,7 @@
                 lng: lngEl.value,
             };
             console.log('Datos principales', data);
-            window.location.href = '/variables-inicio';
+            window.location.href = '/Principal';
         });
 
         document.getElementById('btn-geolocate').addEventListener('click', () => {
@@ -126,6 +163,56 @@
                 statusEl.textContent = 'No se pudo obtener la ubicación: ' + err.message;
             }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
         });
+
+        // Abrir modal y cargar mapa para elegir ubicación manualmente
+        if (pickBtn) {
+            pickBtn.addEventListener('click', () => {
+                if (!modalInstance) {
+                    modalInstance = new bootstrap.Modal(modalEl);
+                }
+                modalInstance.show();
+                // Dar tiempo a que el modal se muestre antes de calcular tamaño del mapa
+                setTimeout(() => {
+                    if (!map) {
+                        const startLat = parseFloat(latEl.value) || 18.7357; // RD por defecto, ajusta a tu región
+                        const startLng = parseFloat(lngEl.value) || -70.1627;
+                        map = L.map('map-picker').setView([startLat, startLng], 7);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 19,
+                            attribution: '&copy; OpenStreetMap'
+                        }).addTo(map);
+                        map.on('click', (e) => {
+                            pickedLatLng = e.latlng;
+                            if (!marker) {
+                                marker = L.marker(e.latlng, { draggable: true }).addTo(map);
+                                marker.on('dragend', () => {
+                                    pickedLatLng = marker.getLatLng();
+                                    previewEl.textContent = `Lat: ${pickedLatLng.lat.toFixed(6)}, Lng: ${pickedLatLng.lng.toFixed(6)}`;
+                                });
+                            } else {
+                                marker.setLatLng(e.latlng);
+                            }
+                            previewEl.textContent = `Lat: ${pickedLatLng.lat.toFixed(6)}, Lng: ${pickedLatLng.lng.toFixed(6)}`;
+                        });
+                    } else {
+                        map.invalidateSize();
+                    }
+                }, 150);
+            });
+        }
+
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', () => {
+                if (pickedLatLng) {
+                    latEl.value = pickedLatLng.lat.toFixed(6);
+                    lngEl.value = pickedLatLng.lng.toFixed(6);
+                }
+                if (!modalInstance) {
+                    modalInstance = new bootstrap.Modal(modalEl);
+                }
+                modalInstance.hide();
+            });
+        }
     })();
 </script>
 {% endblock %}
