@@ -15,8 +15,11 @@
         filter: drop-shadow(0 0 12px rgba(0, 123, 255, 0.7)) drop-shadow(0 0 24px rgba(0, 123, 255, 0.4));
         -webkit-filter: drop-shadow(0 0 12px rgba(0, 123, 255, 0.7)) drop-shadow(0 0 24px rgba(0, 123, 255, 0.4));
     }
+
     /* Alto del mapa en el modal */
-    #map-picker { height: 60vh; }
+    #map-picker {
+        height: 60vh;
+    }
 </style>
 
 <!-- Leaflet CSS solo para esta página -->
@@ -92,25 +95,25 @@
 
 <!-- Modal para seleccionar ubicación en el mapa -->
 <div class="modal fade" id="modalMap" tabindex="-1" aria-labelledby="modalMapLabel" aria-hidden="true">
-  <div class="modal-dialog modal-fullscreen-sm-down modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalMapLabel">Selecciona la ubicación</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body p-0">
-        <div id="map-picker"></div>
-      </div>
-      <div class="modal-footer d-flex w-100 justify-content-between">
-        <div class="text-muted small" id="picked-preview">Haz clic en el mapa para elegir un punto.</div>
-        <div>
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-success" id="btn-confirm-location">Usar esta ubicación</button>
+    <div class="modal-dialog modal-fullscreen-sm-down modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalMapLabel">Selecciona la ubicación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div id="map-picker"></div>
+            </div>
+            <div class="modal-footer d-flex w-100 justify-content-between">
+                <div class="text-muted small" id="picked-preview">Haz clic en el mapa para elegir un punto.</div>
+                <div>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="btn-confirm-location">Usar esta ubicación</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -131,6 +134,14 @@
         let marker = null;
         let pickedLatLng = null;
 
+        // Helpers de cookies
+        const setCookie = (name, value, days = 7) => {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = 'expires=' + d.toUTCString();
+            document.cookie = `${name}=${encodeURIComponent(value)}; ${expires}; path=/; samesite=Lax`;
+        };
+
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             if (!form.checkValidity()) {
@@ -145,6 +156,12 @@
                 lng: lngEl.value,
             };
             console.log('Datos principales', data);
+            // Guardar en cookies para ser leídos en Principal
+            setCookie('vi_ancho', data.ancho);
+            setCookie('vi_alto', data.alto);
+            setCookie('vi_tipoPlanta', data.tipoPlanta);
+            setCookie('vi_lat', data.lat);
+            setCookie('vi_lng', data.lng);
             window.location.href = '/Principal';
         });
 
