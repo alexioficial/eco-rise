@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Principal · Farm Navigators{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-md-10 col-lg-8 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h1 class="h4 mb-3">Datos principales</h1>
+
+                <form id="form-principal" novalidate>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label for="ancho" class="form-label">Ancho (m)</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="ancho"
+                                placeholder="Ej: 50" required>
+                            <div class="invalid-feedback">Ingresa un ancho válido.</div>
+                        </div>
+                        <div class="col-6">
+                            <label for="alto" class="form-label">Alto (m)</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="alto" placeholder="Ej: 30"
+                                required>
+                            <div class="invalid-feedback">Ingresa un alto válido.</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="tipoPlanta" class="form-label">Tipo de planta</label>
+                        <select id="tipoPlanta" class="form-select" required>
+                            <option value="" selected disabled>Selecciona una opción</option>
+                            <option value="maiz">Maíz</option>
+                            <option value="soja">Soja</option>
+                            <option value="trigo">Trigo</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                        <div class="invalid-feedback">Selecciona un tipo de planta.</div>
+                    </div>
+
+                    <div class="row g-2 align-items-end mb-2">
+                        <div class="col-12">
+                            <label class="form-label">Coordenadas</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" inputmode="decimal" pattern="-?\\d+(\\.\\d+)?" class="form-control"
+                                id="lat" placeholder="Latitud" required>
+                            <div class="invalid-feedback">Latitud inválida.</div>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" inputmode="decimal" pattern="-?\\d+(\\.\\d+)?" class="form-control"
+                                id="lng" placeholder="Longitud" required>
+                            <div class="invalid-feedback">Longitud inválida.</div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 mb-3">
+                        <button type="button" id="btn-geolocate" class="btn btn-outline-primary">Usar mi
+                            ubicación</button>
+                        <button type="submit" class="btn btn-primary">Continuar</button>
+                    </div>
+                    <div id="status" class="small text-muted"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    (() => {
+        const form = document.getElementById('form-principal');
+        const statusEl = document.getElementById('status');
+        const latEl = document.getElementById('lat');
+        const lngEl = document.getElementById('lng');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return;
+            }
+            const data = {
+                ancho: document.getElementById('ancho').value,
+                alto: document.getElementById('alto').value,
+                tipoPlanta: document.getElementById('tipoPlanta').value,
+                lat: latEl.value,
+                lng: lngEl.value,
+            };
+            console.log('Datos principales', data);
+            window.location.href = '/variables-inicio';
+        });
+
+        document.getElementById('btn-geolocate').addEventListener('click', () => {
+            if (!('geolocation' in navigator)) {
+                statusEl.textContent = 'Geolocalización no soportada en este dispositivo.';
+                return;
+            }
+            statusEl.textContent = 'Obteniendo ubicación…';
+            navigator.geolocation.getCurrentPosition((pos) => {
+                const { latitude, longitude } = pos.coords;
+                latEl.value = latitude.toFixed(6);
+                lngEl.value = longitude.toFixed(6);
+                statusEl.textContent = 'Ubicación obtenida.';
+            }, (err) => {
+                statusEl.textContent = 'No se pudo obtener la ubicación: ' + err.message;
+            }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+        });
+    })();
+</script>
+{% endblock %}
