@@ -12,6 +12,11 @@
     <link rel="icon" href="/static/imgs/bobby.png">
 
     <style>
+        body {
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
         .la_barra .nav-link i {
             transition: filter 0.2s ease;
         }
@@ -24,7 +29,7 @@
 </head>
 
 <body class="bg-light">
-    <main class="container py-3" style="padding-bottom: 5rem;">
+    <main class="container py-3" style="padding-bottom: 12rem;">
         {% block content %}{% endblock %}
     </main>
 

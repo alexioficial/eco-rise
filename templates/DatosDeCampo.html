@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Datos de Campo{% endblock %}
+{% block title %}Datos de Campo{% endblock title %}
 
 {% block content %}
 
@@ -25,7 +25,7 @@
     <div class="col-12 col-md-10 col-lg-8 mx-auto">
         <img src="/static/imgs/logo.png" class="el_logo" alt="Logo">
         <div class="card shadow-sm">
-            <div class="card-body" style="height: 57vh !important; display: flex; flex-direction: column;">
+            <div class="card-body" style="display: flex; flex-direction: column;">
                 <div class="row">
                     <div class="col-12">
                         <label class="control-titulo">PH del agua <i class="text-primary bi bi-droplet-half"></i></label>
@@ -64,7 +64,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-5">
                     <div class="col-12 mt-3">
                         <button class="btn btn-success w-100" onclick="location.href = '/Principal'">Guardar</button>
                     </div>
@@ -76,9 +76,9 @@
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock content %}
 
 {% block scripts %}
 <script src="/static/fontawesome/js/all.min.js"></script>
 <script src="/static/scripts/Principal.js"></script>
-{% endblock %}
+{% endblock scripts %}
