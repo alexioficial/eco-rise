@@ -27,7 +27,7 @@ def save_page_screenshot(
     height: int = 800,
     wait_until: str = "load",
     device_scale_factor: float = 1,
-    timeout_ms: int = 45000,
+    timeout_ms: int = 120000,
     ready_selector: str = "canvas",
     post_wait_ms: int = 6000,
 ) -> str:

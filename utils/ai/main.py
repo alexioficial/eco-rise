@@ -1,21 +1,12 @@
-"""
-Gemini client and web search/analyze tool.
-
-This module provides a reusable Gemini client and a web_search_and_analyze() tool that searches the web (DuckDuckGo), fetches page content, and asks Gemini to analyze with citations. Adds logging and input validation.
-"""
-
 from os import getenv
 from typing import List, Dict, Optional
-from dataclasses import dataclass
+from enum import Enum
 import logging
-import re
-from urllib.parse import urlparse
 
-import requests
-from bs4 import BeautifulSoup
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 from dotenv import load_dotenv
 from google import genai
+from google.genai import types
 
 
 # Basic logging for diagnostics
@@ -35,218 +26,176 @@ if not GEMINI_API_KEY:
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 
-@dataclass
-class SearchResult:
-    title: str
-    href: str
-    snippet: str
+class Tool(Enum):
+    """Enumerable de herramientas disponibles para Gemini."""
+
+    SEARCH_INTERNET = {
+        "function_declarations": [
+            {
+                "name": "search_internet",
+                "description": "Busca información en internet usando DuckDuckGo. Retorna resultados relevantes con títulos, URLs y snippets.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "La consulta de búsqueda para encontrar información en internet",
+                        },
+                        "max_results": {
+                            "type": "integer",
+                            "description": "Número máximo de resultados a retornar (default: 5)",
+                            "default": 5,
+                        },
+                    },
+                    "required": ["query"],
+                },
+            }
+        ]
+    }
 
 
-def _ddg_search(query: str, max_results: int = 5) -> List[SearchResult]:
-    """Search the web using DuckDuckGo and return top results.
-
-    No API key required. Safe for quick prototyping.
-    """
-    results: List[SearchResult] = []
+def search_internet(query: str, max_results: int = 5) -> List[Dict[str, str]]:
+    """Implementación de la búsqueda en internet usando DuckDuckGo."""
     try:
         with DDGS() as ddgs:
-            for r in ddgs.text(
-                query,
-                max_results=max_results,
-                safesearch="moderate",
-                timelimit="y",
-                region="wt-wt",
-            ):
-                title = r.get("title") or ""
-                href = r.get("href") or r.get("url") or ""
-                snippet = r.get("body") or r.get("snippet") or ""
-                if href:
-                    results.append(
-                        SearchResult(title=title, href=href, snippet=snippet)
-                    )
+            results = list(ddgs.text(query, max_results=max_results))
+            return [
+                {
+                    "title": r.get("title", ""),
+                    "url": r.get("href", ""),
+                    "snippet": r.get("body", ""),
+                }
+                for r in results
+            ]
     except Exception as e:
-        logger.exception("DuckDuckGo search failed: %s", e)
-    return results
+        logger.error(f"Error searching internet: {e}")
+        return []
 
 
-def _fetch_page_text(url: str, timeout: int = 12) -> Optional[str]:
-    """Fetch and clean visible text from a web page."""
-    try:
-        headers = {
-            "User-Agent": (
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/124.0.0.0 Safari/537.36"
-            )
-        }
-        resp = requests.get(url, headers=headers, timeout=timeout)
-        if resp.status_code != 200 or not resp.content:
-            return None
-
-        soup = BeautifulSoup(resp.content, "html.parser")
-        for tag in soup(["script", "style", "noscript", "template"]):
-            tag.decompose()
-        text = soup.get_text(separator=" ")
-        # Normalize whitespace
-        text = re.sub(r"\s+", " ", text).strip()
-        return text or None
-    except Exception:
-        logger.debug("Failed to fetch or parse: %s", url, exc_info=True)
-        return None
-
-
-def _is_url(text: str) -> bool:
-    """Heuristic to detect if a string is a URL (http/https)."""
-    try:
-        parsed = urlparse(text.strip())
-        return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
-    except Exception:
-        return False
-
-
-def web_search_and_analyze(
-    query: str,
-    max_results: int = 5,
-    max_chars_per_doc: int = 2000,
-    model: str = "gemini-2.5-flash",
-) -> Dict:
+def prompt(
+    prompt_param: str,
+    files: Optional[List[str]] = None,
+    tools: Optional[str] = None,
+    system_prompt: Optional[str] = None,
+):
     """
-    Perform a web search, fetch results, and ask Gemini to analyze with citations.
+    Generate a response using Gemini with optional file uploads and tools.
 
-    Returns a dict with keys:
-    - answer: Gemini's synthesized response.
-    - sources: list of dicts: {title, url, snippet}
-    - used_model: model name used
+    Args:
+        prompt: The user prompt/query
+        files: List of file paths to upload to the client
+        tools: Tool configuration (str or callable)
+        system_prompt: System instructions for the model
+
+    Returns:
+        The generated response from Gemini
     """
-    compiled_context_parts: List[str] = []
-    sources: List[Dict[str, str]] = []
+    # Upload files if provided
+    uploaded_files = []
+    if files:
+        for file_path in files:
+            try:
+                uploaded_file = client.files.upload(file=file_path)
+                uploaded_files.append(uploaded_file)
+                logger.info(f"Uploaded file: {file_path}")
+            except Exception as e:
+                logger.error(f"Failed to upload {file_path}: {e}")
 
-    # 1) Direct URL path
-    if _is_url(query):
-        text = _fetch_page_text(query)
-        if text:
-            excerpt = text[:max_chars_per_doc]
-            hostname = urlparse(query).netloc
-            compiled_context_parts.append(
-                f"SOURCE: {hostname}\nURL: {query}\nSNIPPET: (direct URL)\nCONTENT: {excerpt}\n---\n"
-            )
-            sources.append({"title": hostname, "url": query, "snippet": "direct URL"})
+    # Prepare the content parts
+    content_parts = []
+
+    # Add uploaded files to content
+    for uploaded_file in uploaded_files:
+        content_parts.append(uploaded_file)
+
+    # Add the text prompt
+    content_parts.append(prompt_param)
+
+    # Prepare generation config
+    config_params = {}
+
+    if system_prompt:
+        config_params["system_instruction"] = system_prompt
+
+    # Add tools if provided
+    if tools:
+        if isinstance(tools, dict):
+            # Tools es un dict con function_declarations
+            tool_obj = types.Tool(**tools)
+            config_params["tools"] = [tool_obj]
+        elif callable(tools):
+            config_params["tools"] = [tools]
         else:
-            return {
-                "answer": "No pude extraer contenido de la URL proporcionada.",
-                "sources": [{"title": query, "url": query, "snippet": ""}],
-                "used_model": model,
-            }
-    else:
-        # 2) Search path
-        hits = _ddg_search(query, max_results=max_results)
-        if not hits:
-            return {
-                "answer": "No pude encontrar resultados en la búsqueda web.",
-                "sources": [],
-                "used_model": model,
-            }
+            config_params["tools"] = tools
 
-        # 3) Fetch content for top results
-        for h in hits:
-            text = _fetch_page_text(h.href)
-            if not text:
-                continue
-            excerpt = text[:max_chars_per_doc]
-            hostname = urlparse(h.href).netloc
-            compiled_context_parts.append(
-                f"SOURCE: {h.title or hostname}\nURL: {h.href}\nSNIPPET: {h.snippet}\nCONTENT: {excerpt}\n---\n"
-            )
-            sources.append(
-                {"title": h.title or hostname, "url": h.href, "snippet": h.snippet}
-            )
+    # Create config object
+    config = types.GenerateContentConfig(**config_params) if config_params else None
 
-        if not compiled_context_parts:
-            return {
-                "answer": "Pude realizar la búsqueda pero no logré extraer contenido útil de las páginas.",
-                "sources": [
-                    {"title": h.title, "url": h.href, "snippet": h.snippet}
-                    for h in hits
-                ],
-                "used_model": model,
-            }
-
-    context_blob = "\n".join(compiled_context_parts)
-
-    prompt = (
-        "Eres un analista que sintetiza información de la web. "
-        "Usa las fuentes provistas para responder la consulta del usuario de forma concisa, "
-        "incluye puntos clave y proporciona citas entre corchetes con el dominio principal (por ejemplo, [example.com]) "
-        "cuando corresponda. Si hay desacuerdos entre fuentes, explícalos brevemente.\n\n"
-        f"Consulta: {query}\n\n"
-        "Fuentes (no inventes información fuera de esto):\n"
-        f"{context_blob}\n"
-        "Respuesta:"
-    )
-
-    # 3) Ask Gemini to analyze
-    response = client.models.generate_content(
-        model=model,
-        contents=prompt,
-    )
-
-    answer_text = getattr(response, "text", None) or str(response)
-    return {"answer": answer_text, "sources": sources, "used_model": model}
-
-
-# Tool declaration for Gemini function calling
-WEB_SEARCH_TOOL_DECLARATION: Dict = {
-    "function_declarations": [
-        {
-            "name": "web_search_and_analyze",
-            "description": "Busca en la web o analiza una URL y sintetiza una respuesta con citas.",
-            "parameters": {
-                "type": "OBJECT",
-                "properties": {
-                    "query": {
-                        "type": "STRING",
-                        "description": "Consulta o URL directa",
-                    },
-                    "max_results": {
-                        "type": "INTEGER",
-                        "description": "Número de resultados de DuckDuckGo",
-                        "minimum": 1,
-                        "maximum": 10,
-                        "default": 5,
-                    },
-                    "max_chars_per_doc": {
-                        "type": "INTEGER",
-                        "description": "Límite de caracteres por documento",
-                        "default": 2000,
-                    },
-                    "model": {
-                        "type": "STRING",
-                        "description": "Modelo de Gemini",
-                        "default": "gemini-2.5-flash",
-                    },
-                },
-                "required": ["query"],
-            },
-        }
-    ]
-}
-
-
-def execute_tool_call(name: str, arguments: Dict) -> Optional[Dict]:
-    """Execute the declared tool by name with provided arguments."""
-    if name == "web_search_and_analyze":
-        return web_search_and_analyze(
-            query=arguments.get("query", ""),
-            max_results=int(arguments.get("max_results", 5)),
-            max_chars_per_doc=int(arguments.get("max_chars_per_doc", 2000)),
-            model=arguments.get("model", "gemini-2.5-flash"),
+    # Generate response
+    try:
+        response = client.models.generate_content(
+            model="gemini-2.5-flash", contents=content_parts, config=config
         )
-    return None
-
-
-__all__ = [
-    "client",
-    "web_search_and_analyze",
-    "WEB_SEARCH_TOOL_DECLARATION",
-    "execute_tool_call",
-]
+        
+        # Check if response contains function calls
+        function_calls = []
+        if response.candidates and response.candidates[0].content.parts:
+            for part in response.candidates[0].content.parts:
+                if hasattr(part, 'function_call') and part.function_call:
+                    function_calls.append(part.function_call)
+        
+        # If there are function calls, execute them
+        if function_calls:
+            logger.info(f"Detected {len(function_calls)} function call(s)")
+            
+            # Add model's response with function calls to conversation
+            content_parts.append(response.candidates[0].content)
+            
+            # Execute each function call and create response parts
+            for function_call in function_calls:
+                logger.info(f"Executing function: {function_call.name}")
+                
+                if function_call.name == "search_internet":
+                    query = function_call.args.get("query", "")
+                    max_results = function_call.args.get("max_results", 5)
+                    function_result = search_internet(query, max_results)
+                    
+                    # Create function response
+                    function_response_part = types.Part(
+                        function_response=types.FunctionResponse(
+                            name=function_call.name,
+                            response={"result": function_result}
+                        )
+                    )
+                    content_parts.append(function_response_part)
+            
+            # Get final response from model with function results
+            final_response = client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=content_parts,
+                config=config
+            )
+            
+            # Debug logging
+            logger.info(f"Final response text: {final_response.text}")
+            logger.info(f"Final response candidates: {len(final_response.candidates) if final_response.candidates else 0}")
+            
+            if final_response.text:
+                return final_response.text
+            
+            # If still no text, try to extract from parts
+            if final_response.candidates and final_response.candidates[0].content.parts:
+                text_parts = []
+                for part in final_response.candidates[0].content.parts:
+                    if hasattr(part, 'text') and part.text:
+                        text_parts.append(part.text)
+                if text_parts:
+                    return ''.join(text_parts)
+            
+            return "No se pudo generar una respuesta"
+        
+        # If no function calls, return text directly
+        return response.text if response.text else "No se pudo generar una respuesta"
+    except Exception as e:
+        logger.error(f"Error generating content: {e}")
+        raise

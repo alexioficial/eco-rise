@@ -59,7 +59,10 @@ def msg(
     if log:
         escribir_log(msg, status)
 
-    return {"status": status, "msg": msg, **kwargs}
+    # Convert Exception to string for JSON serialization
+    msg_str = str(msg) if isinstance(msg, Exception) else msg
+
+    return {"status": status, "msg": msg_str, **kwargs}
 
 
 def msg_err(exception: Exception):

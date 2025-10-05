@@ -1,8 +1,7 @@
-flask
-requests
-pymongo
+Flask
 python-dotenv
+pymongo
 google-genai
-duckduckgo-search
+ddgs
 beautifulsoup4
 playwright

@@ -15,7 +15,23 @@ async function Calculate(data) {
         notification.error(resp.msg);
         return;
     }
-    location.href = resp.redirect;
+    console.log(resp)
+
+    // Llenar los campos con los datos calculados por Gemini
+    if (resp.temperatura_suelo) {
+        $('#txt_temperatura_suelo').val(resp.temperatura_suelo);
+    }
+    if (resp.demanda_producto) {
+        $('#txt_demanda_producto').val(resp.demanda_producto);
+    }
+    if (resp.probabilidad_lluvia) {
+        $('#txt_probabilidad_lluvia').val(resp.probabilidad_lluvia);
+    }
+
+    // Si hay redirect, usarlo
+    if (resp.redirect) {
+        location.href = resp.redirect;
+    }
 }
 
 async function Cargar() {
@@ -28,10 +44,10 @@ async function Cargar() {
             const lng = parseFloat(getCookie('vi_lng')) || null;
 
             await Calculate({
-                ancho: ancho, 
-                alto: alto, 
-                tipo_planta: tipoPlanta, 
-                lat: lat, 
+                ancho: ancho,
+                alto: alto,
+                tipo_planta: tipoPlanta,
+                lat: lat,
                 lng: lng
             });
 
