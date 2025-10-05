@@ -1,34 +1,84 @@
 {% extends 'base.html' %}
 
-{% block title %}Datos de campo{% endblock %}
+{% block title %}Datos de Campo{% endblock %}
 
 {% block content %}
+
+<style>
+    .el_logo {
+        width: 70%;
+        margin-bottom: 15px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+
+        filter: drop-shadow(0 0 12px rgba(0, 123, 255, 0.7)) drop-shadow(0 0 24px rgba(0, 123, 255, 0.4));
+        -webkit-filter: drop-shadow(0 0 12px rgba(0, 123, 255, 0.7)) drop-shadow(0 0 24px rgba(0, 123, 255, 0.4));
+    }
+
+    .control-titulo {
+        font-size: 1.4em;
+    }
+</style>
+
 <div class="row">
     <div class="col-12 col-md-10 col-lg-8 mx-auto">
+        <img src="/static/imgs/logo.png" class="el_logo" alt="Logo">
         <div class="card shadow-sm">
-            <div class="card-body">
-                <h1 class="h5 mb-3">Datos de campo</h1>
-                <p class="text-muted">Aquí capturaremos observaciones del terreno, fotos, y mediciones. Esto es un
-                    placeholder para iterar.</p>
-
-                <form class="mb-3">
-                    <div class="mb-2">
-                        <label class="form-label" for="humedad">Humedad del suelo (%)</label>
-                        <input id="humedad" type="number" step="0.1" min="0" max="100" class="form-control"
-                            placeholder="Ej: 18.5">
+            <div class="card-body" style="height: 57vh !important; display: flex; flex-direction: column;">
+                <div class="row">
+                    <div class="col-12">
+                        <label class="control-titulo">PH del agua <i class="text-primary bi bi-droplet-half"></i></label>
+                        <div class="input-group w-75">
+                            <input type="number" id="txt_ph_agua" class="form-control">
+                            <div class="input-group-text" onclick="window.open('/static/pdfs/medicion del ph  del suelo.pdf')">
+                                <i class="fa fa-question"></i>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-2">
-                        <label class="form-label" for="notas">Notas</label>
-                        <textarea id="notas" class="form-control" rows="3" placeholder="Observaciones"></textarea>
+                    <div class="col-12 mt-3">
+                        <label class="control-titulo">Conductividad del agua <i class="text-warning bi bi-lightning-charge-fill"></i></label>
+                        <div class="input-group w-75">
+                            <input type="number" id="txt_conductividad_agua" class="form-control">
+                            <div class="input-group-text" onclick="window.open('/static/pdfs/Conductividad del Agua.pdf')">
+                                <i class="fa fa-question"></i>
+                            </div>
+                        </div>
                     </div>
-                </form>
-
-                <div class="d-flex gap-2">
-                    <a class="btn btn-outline-secondary" href="/Principal">Volver</a>
-                    <a class="btn btn-success" href="/">Finalizar</a>
+                    <div class="col-12 mt-3">
+                        <label class="control-titulo">Salinidad de la tierra <i class="text-success fas fa-seedling"></i></label>
+                        <div class="input-group w-75">
+                            <input type="number" id="txt_salinidad_tierra" class="form-control">
+                            <div class="input-group-text" onclick="window.open('/static/pdfs/Medición de la Salinidad del Suelo.pdf')">
+                                <i class="fa fa-question"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <label class="control-titulo">Humedad de la tierra <i class="text-primary fas fa-water"></i></label>
+                        <div class="input-group w-75">
+                            <input type="number" id="txt_humedad_tierra" class="form-control">
+                            <div class="input-group-text" onclick="window.open('/static/pdfs/Análisis de la tierra (nutrientes y composición).pdf')">
+                                <i class="fa fa-question"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-success w-100" onclick="location.href = '/Principal'">Guardar</button>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-primary w-100">Adquiere kit de medición</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/fontawesome/js/all.min.js"></script>
+<script src="/static/scripts/Principal.js"></script>
 {% endblock %}

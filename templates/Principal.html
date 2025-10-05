@@ -3,34 +3,59 @@
 {% block title %}Variables de inicio · Farm Navigators{% endblock %}
 
 {% block content %}
+
+<style>
+    #img_cultivos {
+        border: 1.4px solid rgb(172, 172, 172);
+        border-radius: 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .porcentaje_efectividad {
+        font-size: 2.5em;
+    }
+</style>
+
 <div class="row">
     <div class="col-12 col-md-10 col-lg-8 mx-auto">
         <div class="card shadow-sm">
-            <div class="card-body" style="height: 85vh !important;">
+            <div class="card-body" style="height: 85vh !important; display: flex; flex-direction: column;">
                 <div class="row">
                     <div class="col-6">
-                        <label title="Temperatura del suelo.">Temperatura</label>
-                        <input type="text" id="txt_temperatura_suelo" class="form-control" disabled>
+                        <label title="Temperatura del suelo." class="fs-6 text-bold">Temperatura (F°)</label>
+                        <input type="text" id="txt_temperatura_suelo" value="75.2" class="form-control fs-6" disabled>
                     </div>
                     <div class="col-6">
-                        <!-- TODO poner el "?" con la infografia -->
-                        <label>Tipo de suelo</label>
-                        <select id="ddl_tipo_suelo" class="form-select">
-                            <option value="1">Arenoso</option>
+                        <label class="fs-6 text-bold">Tipo de suelo</label>
+                        <select id="ddl_tipo_suelo" class="form-select fs-6" disabled>
+                            <option value="1">Arenoso</option>r
                             <option value="2">Arcilloso</option>
                             <option value="3">Limoso</option>
-                            <option value="4">Franco</option>
+                            <option value="4" selected>Franco</option>
                         </select>
                     </div>
                     <div class="col-6">
-                        <!-- TODO pedirle a gemini que calcule la demanda del producto en base al mercado del pais de donde se pusieron las coordenadas -->
-                        <label>Demanda del producto</label>
-                        <input type="text" id="txt_demanda_producto" class="form-control" disabled>
+                        <label class="fs-6 text-bold">Demanda del producto</label>
+                        <input type="text" id="txt_demanda_producto" class="form-control fs-6" value="Alta" disabled>
                     </div>
                     <div class="col-6">
-                        <!-- TODO sacar eta vaina de una API de weather -->
-                        <label>Probabilidad de lluvia</label>
-                        <input type="text" id="txt_probabilidad_lluvia" class="form-control" disabled>
+                        <label class="fs-6 text-bold">Probabilidad de lluvia</label>
+                        <input type="text" id="txt_probabilidad_lluvia" value="Media" class="form-control fs-6" disabled>
+                    </div>
+                </div>
+                <img src="/static/imgs/tierra_sola.png" id="img_cultivos" style="width: 100%;" alt="tierra_sola">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 style="text-decoration: underline;">Efectividad del cultivo:</h4>
+                        <h1 class="porcentaje_efectividad">80%</h1>
+                    </div>
+                </div>
+                <div class="row mt-auto">
+                    <div class="col-12">
+                        <label class="fs-5" title="Fecha de proyección de los cultivos">Fecha</label>
+                        <input type="date" id="txt_fecha" class="form-control mb-2 fs-5">
+                        <button type="button" class="btn btn-primary w-100" onclick="window.open('/static/pdfs/5 consejos para que tus cultivos sean más sostenible.pdf')">Consejos</button>
                     </div>
                 </div>
             </div>
