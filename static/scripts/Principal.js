@@ -1,5 +1,5 @@
-async function Calculate(data) {
-    const resp = await tools.PostBack('/Calculate', data);
+async function Calculate() {
+    const resp = await tools.PostBack('/Calculate', {});
     if (resp.status === 1) {
         notification.error(resp.msg);
         return;
@@ -23,38 +23,38 @@ async function Calculate(data) {
     }
 }
 
-async function ClickCultivos() {
-    $('#img_cultivos').click(e => {
-        var element = $(`#${e.target.id}`);
-        const crop = element.attr('alt');
-        switch (crop) {
-            case 'tierra_sola':
-                element.attr('src', '/static/imgs/cultivos_1.png');
-                element.attr('alt', 'cultivos_1');
-                break;
-            case 'cultivos_1':
-                element.attr('src', '/static/imgs/cultivos_2.png');
-                element.attr('alt', 'cultivos_2');
-                break;
-            case 'cultivos_2':
-                element.attr('src', '/static/imgs/lechuga.png');
-                element.attr('alt', 'lechuga');
-                break;
-            case 'lechuga':
-                element.attr('src', '/static/imgs/tomate.png');
-                element.attr('alt', 'tomate');
-                break;
-            case 'tomate':
-                element.attr('src', '/static/imgs/maiz.png');
-                element.attr('alt', 'maiz');
-                break;
-            case 'maiz':
-                element.attr('src', '/static/imgs/tierra_sola.png');
-                element.attr('alt', 'tierra_sola');
-                break;
-        }
-    });
-}
+// async function ClickCultivos() {
+//     $('#img_cultivos').click(e => {
+//         var element = $(`#${e.target.id}`);
+//         const crop = element.attr('alt');
+//         switch (crop) {
+//             case 'tierra_sola':
+//                 element.attr('src', '/static/imgs/cultivos_1.png');
+//                 element.attr('alt', 'cultivos_1');
+//                 break;
+//             case 'cultivos_1':
+//                 element.attr('src', '/static/imgs/cultivos_2.png');
+//                 element.attr('alt', 'cultivos_2');
+//                 break;
+//             case 'cultivos_2':
+//                 element.attr('src', '/static/imgs/lechuga.png');
+//                 element.attr('alt', 'lechuga');
+//                 break;
+//             case 'lechuga':
+//                 element.attr('src', '/static/imgs/tomate.png');
+//                 element.attr('alt', 'tomate');
+//                 break;
+//             case 'tomate':
+//                 element.attr('src', '/static/imgs/maiz.png');
+//                 element.attr('alt', 'maiz');
+//                 break;
+//             case 'maiz':
+//                 element.attr('src', '/static/imgs/tierra_sola.png');
+//                 element.attr('alt', 'tierra_sola');
+//                 break;
+//         }
+//     });
+// }
 
 async function SetTodayDate() {
     const today = new Date();
@@ -75,10 +75,9 @@ async function SetTodayDate() {
 }
 
 async function Load() {
-    // Data is already loaded from backend
-    // Backend redirects to /VariablesDeInicio if no data exists
-    ClickCultivos();
+    // ClickCultivos();
     SetTodayDate();
+    await Calculate();
 }
 
 $(() => {
