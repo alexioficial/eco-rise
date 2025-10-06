@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template
+# from flask import request
 # import json
 # import re
 # import os
@@ -28,90 +29,82 @@ def Principal():
 #         url = f"https://cat.csiss.gmu.edu/CropSmart#map=7.4/{lng}/{lat}"
 #         path = f"static/imgs/data/m_{lat}_{lng}.png"
 
-#         # Verificar si el screenshot ya existe
+#         # Check if screenshot already exists
 #         if os.path.exists(path):
 #             mapa = path
 #         else:
 #             mapa = save_page_screenshot(url, path)
 
-#         # Hacer búsquedas directamente (más rápido que function calling)
+#         # Do searches directly (faster than function calling)
 
-#         busqueda_temperatura = search_internet(
-#             f"temperatura suelo {_tipo_planta} {lat} {lng}", max_results=2
 #         )
-#         busqueda_demanda = search_internet(
-#             f"demanda mercado {_tipo_planta} Estados Unidos", max_results=2
-#         )
-#         busqueda_clima = search_internet(f"pronóstico clima {lat} {lng}", max_results=2)
 
 #         ai_response = prompt(
 #             prompt_param=f"""
-# Analiza los siguientes datos de un terreno agrícola y el mapa satelital adjunto:
+# Analyze the following data from an agricultural field and the attached satellite map:
+# - Width: {_ancho} meters
+# - Height: {_alto} meters  
+# - Total area: {_ancho * _alto} m²
+# - Plant type: {_tipo_planta}
+# - Location: {lat}, {lng}
 
-# **Datos del terreno:**
-# - Ancho: {_ancho} metros
-# - Alto: {_alto} metros  
-# - Área total: {_ancho * _alto} m²
-# - Tipo de planta: {_tipo_planta}
-# - Ubicación: {lat}, {lng}
+# **Information from internet searches:**
 
-# **Información de búsquedas en internet:**
-
-# Temperatura del suelo:
+# Soil temperature:
 # {json.dumps(busqueda_temperatura, indent=2, ensure_ascii=False)}
 
-# Demanda de mercado:
+# Market demand:
 # {json.dumps(busqueda_demanda, indent=2, ensure_ascii=False)}
 
-# Pronóstico climático:
+# Weather forecast:
 # {json.dumps(busqueda_clima, indent=2, ensure_ascii=False)}
 
-# Basándote en esta información, genera un JSON con los datos solicitados.
+# Based on this information, generate a JSON with the requested data.
 #             """,
 #             files=[mapa],
 #             system_prompt="""
-# Eres un experto en agricultura. Analiza la información proporcionada y responde ÚNICAMENTE con un JSON válido:
+# You are an agriculture expert. Analyze the provided information and respond ONLY with a valid JSON:
 
 # {
-#     "temperatura_suelo": "<valor en °C o estimación basada en la info>",
-#     "demanda_producto": "<Alta/Media/Baja con breve contexto>",
-#     "probabilidad_lluvia": "<porcentaje o nivel>"
+#     "temperatura_suelo": "<value in °C or estimate based on info>",
+#     "demanda_producto": "<High/Medium/Low with brief context>",
+#     "probabilidad_lluvia": "<percentage or level>"
 # }
 
-# REGLAS:
-# - Solo retorna el JSON, nada más
-# - Si falta info, estima basándote en el contexto
-# - Sé conciso
+# RULES:
+# - Only return the JSON, nothing else
+# - If info is missing, estimate based on context
+# - Be concise
 #             """,
 #         )
 
-#         # Parsear la respuesta JSON de Gemini
+#         # Parse Gemini's JSON response
 #         try:
-#             # Extraer JSON de la respuesta (puede venir con markdown ```json```)
+#             # Extract JSON from response (may come with markdown ```json```)
 #             json_match = re.search(r"\{.*\}", ai_response, re.DOTALL)
 #             if json_match:
 #                 datos_calculados = json.loads(json_match.group())
 #             else:
 #                 datos_calculados = {
-#                     "temperatura_suelo": "No disponible",
-#                     "demanda_producto": "No disponible",
-#                     "probabilidad_lluvia": "No disponible",
+#                     "temperatura_suelo": "Not available",
+#                     "demanda_producto": "Not available",
+#                     "probabilidad_lluvia": "Not available",
 #                 }
 #         except json.JSONDecodeError:
 #             datos_calculados = {
-#                 "temperatura_suelo": "Error al procesar",
-#                 "demanda_producto": "Error al procesar",
-#                 "probabilidad_lluvia": "Error al procesar",
+#                 "temperatura_suelo": "Processing error",
+#                 "demanda_producto": "Processing error",
+#                 "probabilidad_lluvia": "Processing error",
 #             }
 
 #         return tools.msg(
 #             url_mapa=mapa,
 #             temperatura_suelo=datos_calculados.get(
-#                 "temperatura_suelo", "No disponible"
+#                 "temperatura_suelo", "Not available"
 #             ),
-#             demanda_producto=datos_calculados.get("demanda_producto", "No disponible"),
+#             demanda_producto=datos_calculados.get("demanda_producto", "Not available"),
 #             probabilidad_lluvia=datos_calculados.get(
-#                 "probabilidad_lluvia", "No disponible"
+#                 "probabilidad_lluvia", "Not available"
 #             ),
 #         )
 #     except Exception as e:

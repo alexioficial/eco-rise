@@ -1,37 +1,37 @@
-Los principales tipos de suelo se clasifican por su textura, siendo los más comunes el arenoso, que es ligero y con buen drenaje, pero pobre en nutrientes y agua; el arcilloso, que es pesado, retiene mucha agua y nutrientes, pero dificulta la aireación y el drenaje; el limoso, que es suave, retiene agua pero no tanto como el arcilloso, siendo fértil y con buen drenaje; y el franco, que es una mezcla equilibrada de los tres anteriores, considerado el más fértil y fácil de trabajar para la agricultura. 
-1. Suelo arenoso
-Características
-: Compuesto principalmente por partículas grandes (arena), es áspero al tacto, ligero y de fácil trabajo. 
-Ventajas
-: Drena muy bien y facilita la penetración de las raíces. 
-Desventajas
-: No retiene el agua ni los nutrientes, que se pierden por lavado fácilmente. 
-Uso
-: Bueno para plantas que prefieren suelos bien drenados. 
-2. Suelo arcilloso
-Características
-: Formado por partículas diminutas, es pesado, se compacta con facilidad y se vuelve muy plástico cuando está húmedo. 
-Ventajas
-: Retiene bien el agua y es rico en nutrientes. 
-Desventajas
-: Su alta cohesión puede dificultar el crecimiento de las raíces y la aireación del suelo, y un drenaje pobre puede provocar encharcamientos. 
-Uso
-: Ideal para plantas que necesitan alta humedad y abundantes nutrientes. 
-3. Suelo limoso
-Características
-: Sus partículas son de un tamaño intermedio entre la arena y la arcilla, dándole un tacto suave y polvoriento cuando está seco. 
-Ventajas
-: Es fértil, retiene bastante bien la humedad y tiene un buen drenaje. 
-Desventajas
-: Puede erosionarse con facilidad y, aunque retiene agua, no es tan plástico como el arcilloso. 
-Uso
-: Favorece a una gran variedad de plantas, aunque se necesita vigilar la erosión. 
-4. Suelo franco
-Características
-: Es una mezcla equilibrada de arena, limo y arcilla, lo que le confiere propiedades mixtas. 
-Ventajas
-: Es considerado el suelo ideal para la agricultura, ya que es muy fértil, retiene la humedad y los nutrientes de forma equilibrada y es fácil de trabajar. 
-Desventajas
-: Al ser una mezcla, no presenta las desventajas de los suelos puros. 
-Uso
-: Apto para una amplia gama de cultivos. 
+The main soil types are classified by their texture, with the most common being sandy, which is light and well-drained, but poor in nutrients and water; clay, which is heavy, retains a lot of water and nutrients, but hinders aeration and drainage; silty, which is soft, retains water but not as much as clay, being fertile and well-drained; and loam, which is a balanced mixture of the three previous ones, considered the most fertile and easy to work with for agriculture.
+1. Sandy Soil
+Characteristics
+: Composed mainly of large particles (sand), it is rough to the touch, light and easy to work with.
+Advantages
+: Drains very well and facilitates root penetration.
+Disadvantages
+: Does not retain water or nutrients, which are easily lost by leaching.
+Use
+: Good for plants that prefer well-drained soils.
+2. Clay Soil
+Characteristics
+: Formed by tiny particles, it is heavy, compacts easily and becomes very plastic when wet.
+Advantages
+: Retains water well and is rich in nutrients.
+Disadvantages
+: Its high cohesion can hinder root growth and soil aeration, and poor drainage can cause waterlogging.
+Use
+: Ideal for plants that need high moisture and abundant nutrients.
+3. Silty Soil
+Characteristics
+: Its particles are of an intermediate size between sand and clay, giving it a soft and powdery feel when dry.
+Advantages
+: It is fertile, retains moisture fairly well and has good drainage.
+Disadvantages
+: Can erode easily and, although it retains water, it is not as plastic as clay.
+Use
+: Favors a wide variety of plants, although erosion needs to be monitored.
+4. Loam Soil
+Characteristics
+: It is a balanced mixture of sand, silt and clay, which gives it mixed properties.
+Advantages
+: It is considered the ideal soil for agriculture, as it is very fertile, retains moisture and nutrients in a balanced way and is easy to work with.
+Disadvantages
+: Being a mixture, it does not present the disadvantages of pure soils.
+Use
+: Suitable for a wide range of crops. 

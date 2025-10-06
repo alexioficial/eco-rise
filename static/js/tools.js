@@ -1,11 +1,11 @@
 const tools = {
-    PostBack: async (ruta, datos, headers = {}) => {
-        datos['_id'] = window._id || '';
+    PostBack: async (route, data, headers = {}) => {
+        data['_id'] = window._id || '';
         return new Promise((resolve, reject) => {
             $.ajax({
                 type: "POST",
-                url: ruta,
-                data: JSON.stringify(datos),
+                url: route,
+                data: JSON.stringify(data),
                 contentType: "application/json",
                 dataType: "json",
                 headers: headers,
@@ -29,15 +29,15 @@ const tools = {
             }
         });
     },
-    AbrirModal: (querySelector, focus) => {
-        var elemento = document.querySelector(querySelector);
-        const modal = new bootstrap.Modal(elemento);
+    OpenModal: (querySelector, focus) => {
+        var element = document.querySelector(querySelector);
+        const modal = new bootstrap.Modal(element);
         modal.show();
         $(focus).focus();
     },
-    CerrarModal: (querySelector) => {
-        var elemento = document.querySelector(querySelector);
-        const modal = bootstrap.Modal.getInstance(elemento);
+    CloseModal: (querySelector) => {
+        var element = document.querySelector(querySelector);
+        const modal = bootstrap.Modal.getInstance(element);
         if (modal) {
             modal.hide();
         }
@@ -58,7 +58,7 @@ const tools = {
                 if (type === 'checkbox') {
                     value = el.checked;
                 } else if (type === 'radio') {
-                    if (!el.checked) return; // sólo tomamos el radio seleccionado
+                    if (!el.checked) return; // only take the selected radio
                     value = el.value;
                 } else {
                     value = el.value;
@@ -85,14 +85,14 @@ const notification = {
             document.body.insertAdjacentHTML('beforeend', container);
         }
     },
-    exito: function (mensaje) {
+    success: function (message) {
         this.init();
         const toastId = 'toast-' + Date.now();
         const html = `
             <div id="${toastId}" class="toast align-items-center text-white bg-success border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                        ${mensaje}
+                        ${message}
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
@@ -105,14 +105,14 @@ const notification = {
             toastEl.remove();
         });
     },
-    error: function (mensaje) {
+    error: function (message) {
         this.init();
         const toastId = 'toast-' + Date.now();
         const html = `
             <div id="${toastId}" class="toast align-items-center text-white bg-danger border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                        ${mensaje}
+                        ${message}
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
@@ -125,14 +125,14 @@ const notification = {
             toastEl.remove();
         });
     },
-    warning: function (mensaje) {
+    warning: function (message) {
         this.init();
         const toastId = 'toast-' + Date.now();
         const html = `
             <div id="${toastId}" class="toast align-items-center text-dark bg-warning border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                        ${mensaje}
+                        ${message}
                     </div>
                     <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
@@ -145,14 +145,14 @@ const notification = {
             toastEl.remove();
         });
     },
-    info: function (mensaje) {
+    info: function (message) {
         this.init();
         const toastId = 'toast-' + Date.now();
         const html = `
             <div id="${toastId}" class="toast align-items-center text-white bg-info border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                        ${mensaje}
+                        ${message}
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>

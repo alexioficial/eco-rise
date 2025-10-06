@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Variables de inicio · Farm Navigators{% endblock %}
+{% block title %}Initial Variables · Farm Navigators{% endblock %}
 
 {% block content %}
 
@@ -23,39 +23,39 @@
             <div class="card-body" style="display: flex; flex-direction: column;">
                 <div class="row">
                     <div class="col-6">
-                        <label title="Temperatura del suelo." class="fs-6 text-bold">Temperatura (F°)</label>
+                        <label title="Soil temperature." class="fs-6 text-bold">Temperature (F°)</label>
                         <input type="text" id="txt_temperatura_suelo" value="75.2" class="form-control fs-6" disabled>
                     </div>
                     <div class="col-6">
-                        <label class="fs-6 text-bold">Tipo de suelo</label>
+                        <label class="fs-6 text-bold">Soil Type</label>
                         <select id="ddl_tipo_suelo" class="form-select fs-6" disabled>
-                            <option value="1">Arenoso</option>
-                            <option value="2">Arcilloso</option>
-                            <option value="3">Limoso</option>
-                            <option value="4" selected>Franco</option>
+                            <option value="1">Sandy</option>
+                            <option value="2">Clay</option>
+                            <option value="3">Silty</option>
+                            <option value="4" selected>Loam</option>
                         </select>
                     </div>
                     <div class="col-6">
-                        <label class="fs-6 text-bold">Demanda del producto</label>
-                        <input type="text" id="txt_demanda_producto" class="form-control fs-6" value="Alta" disabled>
+                        <label class="fs-6 text-bold">Product Demand</label>
+                        <input type="text" id="txt_demanda_producto" class="form-control fs-6" value="High" disabled>
                     </div>
                     <div class="col-6">
-                        <label class="fs-6 text-bold">Probabilidad de lluvia</label>
-                        <input type="text" id="txt_probabilidad_lluvia" value="Media" class="form-control fs-6" disabled>
+                        <label class="fs-6 text-bold">Rain Probability</label>
+                        <input type="text" id="txt_probabilidad_lluvia" value="Medium" class="form-control fs-6" disabled>
                     </div>
                 </div>
                 <img src="/static/imgs/tierra_sola.png" id="img_cultivos" style="width: 100%;" alt="tierra_sola">
                 <div class="row">
                     <div class="col-12">
-                        <h4 style="text-decoration: underline;">Efectividad del cultivo:</h4>
+                        <h4 style="text-decoration: underline;">Crop Effectiveness:</h4>
                         <h1 class="porcentaje_efectividad">80%</h1>
                     </div>
                 </div>
                 <div class="row mt-auto mb-5">
                     <div class="col-12">
-                        <label class="fs-5" title="Fecha de proyección de los cultivos">Fecha</label>
+                        <label class="fs-5" title="Crop projection date">Date</label>
                         <input type="date" id="txt_fecha" class="form-control mb-2 fs-5">
-                        <button type="button" class="btn btn-primary w-100" onclick="window.open('https://drive.google.com/file/d/1bh9I_et3Om-avqXIT-Wgmdi2kHCQ51qw/view')">Consejos</button>
+                        <button type="button" class="btn btn-primary w-100" onclick="window.open('https://drive.google.com/file/d/1bh9I_et3Om-avqXIT-Wgmdi2kHCQ51qw/view')">Advice</button>
                     </div>
                 </div>
             </div>

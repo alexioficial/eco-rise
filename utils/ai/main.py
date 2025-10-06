@@ -27,23 +27,23 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 
 
 class Tool(Enum):
-    """Enumerable de herramientas disponibles para Gemini."""
+    """Enumeration of available tools for Gemini."""
 
     SEARCH_INTERNET = {
         "function_declarations": [
             {
                 "name": "search_internet",
-                "description": "Busca información en internet usando DuckDuckGo. Retorna resultados relevantes con títulos, URLs y snippets.",
+                "description": "Search for information on the internet using DuckDuckGo. Returns relevant results with titles, URLs and snippets.",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "query": {
                             "type": "string",
-                            "description": "La consulta de búsqueda para encontrar información en internet",
+                            "description": "The search query to find information on the internet",
                         },
                         "max_results": {
                             "type": "integer",
-                            "description": "Número máximo de resultados a retornar (default: 5)",
+                            "description": "Maximum number of results to return (default: 5)",
                             "default": 5,
                         },
                     },
@@ -55,7 +55,7 @@ class Tool(Enum):
 
 
 def search_internet(query: str, max_results: int = 5) -> List[Dict[str, str]]:
-    """Implementación de la búsqueda en internet usando DuckDuckGo."""
+    """Implementation of internet search using DuckDuckGo."""
     try:
         with DDGS() as ddgs:
             results = list(ddgs.text(query, max_results=max_results))
@@ -120,7 +120,7 @@ def prompt(
     # Add tools if provided
     if tools:
         if isinstance(tools, dict):
-            # Tools es un dict con function_declarations
+            # Tools is a dict with function_declarations
             tool_obj = types.Tool(**tools)
             config_params["tools"] = [tool_obj]
         elif callable(tools):
@@ -192,10 +192,10 @@ def prompt(
                 if text_parts:
                     return ''.join(text_parts)
             
-            return "No se pudo generar una respuesta"
+            return "Could not generate a response"
         
         # If no function calls, return text directly
-        return response.text if response.text else "No se pudo generar una respuesta"
+        return response.text if response.text else "Could not generate a response"
     except Exception as e:
         logger.error(f"Error generating content: {e}")
         raise

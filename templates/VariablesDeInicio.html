@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Principal{% endblock %}
+{% block title %}Main{% endblock %}
 
 {% block content %}
 
@@ -16,13 +16,13 @@
         -webkit-filter: drop-shadow(0 0 12px rgba(0, 123, 255, 0.7)) drop-shadow(0 0 24px rgba(0, 123, 255, 0.4));
     }
 
-    /* Alto del mapa en el modal */
+    /* Map height in modal */
     #map-picker {
         height: 60vh;
     }
 </style>
 
-<!-- Leaflet CSS solo para esta página -->
+<!-- Leaflet CSS for this page only -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 
 <div class="row">
@@ -30,61 +30,61 @@
         <img src="/static/imgs/logo.png" class="el_logo" alt="Logo">
         <div class="card shadow-sm">
             <div class="card-body">
-                <h1 class="h4 mb-3">DATOS PRINCIPALES</h1>
+                <h1 class="h4 mb-3">MAIN DATA</h1>
 
                 <form id="form-principal" novalidate>
                     <div class="row g-2 mb-3">
                         <div class="col-6">
-                            <label for="ancho" class="form-label">ANCHO (m)</label>
+                            <label for="ancho" class="form-label">WIDTH (m)</label>
                             <input type="number" step="0.01" min="0" class="form-control" id="ancho"
-                                placeholder="Ej: 50" required>
-                            <div class="invalid-feedback">Ingresa un ancho válido.</div>
+                                placeholder="Ex: 50" required>
+                            <div class="invalid-feedback">Enter a valid width.</div>
                         </div>
                         <div class="col-6">
-                            <label for="alto" class="form-label">ALTO (m)</label>
-                            <input type="number" step="0.01" min="0" class="form-control" id="alto" placeholder="Ej: 30"
+                            <label for="alto" class="form-label">LENGTH (m)</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="alto" placeholder="Ex: 30"
                                 required>
-                            <div class="invalid-feedback">Ingresa un alto válido.</div>
+                            <div class="invalid-feedback">Enter a valid length.</div>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="tipoPlanta" class="form-label">Tipo de planta</label>
+                        <label for="tipoPlanta" class="form-label">Plant Type</label>
                         <select id="tipoPlanta" class="form-select" required>
-                            <option value="" selected disabled>Selecciona una opción</option>
-                            <option value="tomate">Tomate</option>
-                            <option value="maiz">Maiz</option>
-                            <option value="lechuga">Lechuga</option>
+                            <option value="" selected disabled>Select an option</option>
+                            <option value="tomate">Tomato</option>
+                            <option value="maiz">Corn</option>
+                            <option value="lechuga">Lettuce</option>
                         </select>
-                        <div class="invalid-feedback">Selecciona un tipo de planta.</div>
+                        <div class="invalid-feedback">Select a plant type.</div>
                     </div>
 
                     <div class="row g-2 align-items-end mb-2">
                         <div class="col-12">
-                            <label class="form-label">Coordenadas</label>
+                            <label class="form-label">Coordinates</label>
                         </div>
                         <div class="col-6">
-                            <input type="text" inputmode="decimal" class="form-control" id="lat" placeholder="Latitud"
+                            <input type="text" inputmode="decimal" class="form-control" id="lat" placeholder="Latitude"
                                 required>
-                            <div class="invalid-feedback">Latitud inválida.</div>
+                            <div class="invalid-feedback">Invalid latitude.</div>
                         </div>
                         <div class="col-6">
-                            <input type="text" inputmode="decimal" class="form-control" id="lng" placeholder="Longitud"
+                            <input type="text" inputmode="decimal" class="form-control" id="lng" placeholder="Longitude"
                                 required>
-                            <div class="invalid-feedback">Longitud inválida.</div>
+                            <div class="invalid-feedback">Invalid longitude.</div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-6 mx-0 pe-1">
-                            <button type="button" id="btn-geolocate" class="btn btn-outline-success">Usar mi
-                                ubicación</button>
+                            <button type="button" id="btn-geolocate" class="btn btn-outline-success">Use my
+                                location</button>
                         </div>
                         <div class="col-6 mx-0 ps-1">
-                            <button type="button" id="btn-pick-location" class="btn btn-outline-success">Usar otra
-                                ubicación</button>
+                            <button type="button" id="btn-pick-location" class="btn btn-outline-success">Use another
+                                location</button>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success w-100">Continuar</button>
+                    <button type="submit" class="btn btn-success w-100">Continue</button>
                     <div id="status" class="small text-muted mb-5"></div>
                 </form>
             </div>
@@ -92,22 +92,22 @@
     </div>
 </div>
 
-<!-- Modal para seleccionar ubicación en el mapa -->
+<!-- Modal to select location on map -->
 <div class="modal fade" id="modalMap" tabindex="-1" aria-labelledby="modalMapLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalMapLabel">Selecciona la ubicación</h5>
+                <h5 class="modal-title" id="modalMapLabel">Select Location</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-0">
                 <div id="map-picker"></div>
             </div>
             <div class="modal-footer d-flex w-100 justify-content-between">
-                <div class="text-muted small" id="picked-preview">Haz clic en el mapa para elegir un punto.</div>
+                <div class="text-muted small" id="picked-preview">Click on the map to choose a point.</div>
                 <div>
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success" id="btn-confirm-location">Usar esta ubicación</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="btn-confirm-location">Use this location</button>
                 </div>
             </div>
         </div>
@@ -116,7 +116,7 @@
 {% endblock %}
 
 {% block scripts %}
-<!-- Leaflet JS solo para esta página -->
+<!-- Leaflet JS for this page only -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
     (() => {
@@ -133,7 +133,7 @@
         let marker = null;
         let pickedLatLng = null;
 
-        // Helpers de cookies
+        // Cookie helpers
         const setCookie = (name, value, days = 7) => {
             const d = new Date();
             d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -154,8 +154,8 @@
                 lat: latEl.value,
                 lng: lngEl.value,
             };
-            console.log('Datos principales', data);
-            // Guardar en cookies para ser leídos en Principal
+            console.log('Main data', data);
+            // Save to cookies to be read in Main
             setCookie('vi_ancho', data.ancho);
             setCookie('vi_alto', data.alto);
             setCookie('vi_tipoPlanta', data.tipoPlanta);
@@ -166,31 +166,31 @@
 
         document.getElementById('btn-geolocate').addEventListener('click', () => {
             if (!('geolocation' in navigator)) {
-                statusEl.textContent = 'Geolocalización no soportada en este dispositivo.';
+                statusEl.textContent = 'Geolocation not supported on this device.';
                 return;
             }
-            statusEl.textContent = 'Obteniendo ubicación…';
+            statusEl.textContent = 'Getting location…';
             navigator.geolocation.getCurrentPosition((pos) => {
                 const { latitude, longitude } = pos.coords;
                 latEl.value = latitude.toFixed(6);
                 lngEl.value = longitude.toFixed(6);
-                statusEl.textContent = 'Ubicación obtenida.';
+                statusEl.textContent = 'Location obtained.';
             }, (err) => {
-                statusEl.textContent = 'No se pudo obtener la ubicación: ' + err.message;
+                statusEl.textContent = 'Could not get location: ' + err.message;
             }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
         });
 
-        // Abrir modal y cargar mapa para elegir ubicación manualmente
+        // Open modal and load map to manually choose location
         if (pickBtn) {
             pickBtn.addEventListener('click', () => {
                 if (!modalInstance) {
                     modalInstance = new bootstrap.Modal(modalEl);
                 }
                 modalInstance.show();
-                // Dar tiempo a que el modal se muestre antes de calcular tamaño del mapa
+                // Give time for modal to show before calculating map size
                 setTimeout(() => {
                     if (!map) {
-                        const startLat = parseFloat(latEl.value) || 18.7357; // RD por defecto, ajusta a tu región
+                        const startLat = parseFloat(latEl.value) || 18.7357; // Default RD, adjust to your region
                         const startLng = parseFloat(lngEl.value) || -70.1627;
                         map = L.map('map-picker').setView([startLat, startLng], 7);
                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

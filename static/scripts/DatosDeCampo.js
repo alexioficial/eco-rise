@@ -1,4 +1,4 @@
-async function Cargar() {
+async function Load() {
     while (true) {
         try {
             
@@ -11,5 +11,5 @@ async function Cargar() {
 }
 
 $(() => {
-    Cargar();
+    Load();
 });

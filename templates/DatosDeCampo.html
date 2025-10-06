@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Datos de Campo{% endblock title %}
+{% block title %}Field Data{% endblock title %}
 
 {% block content %}
 
@@ -28,7 +28,7 @@
             <div class="card-body" style="display: flex; flex-direction: column;">
                 <div class="row">
                     <div class="col-12">
-                        <label class="control-titulo">PH del agua <i class="text-primary bi bi-droplet-half"></i></label>
+                        <label class="control-titulo">Water pH <i class="text-primary bi bi-droplet-half"></i></label>
                         <div class="input-group w-75">
                             <input type="number" id="txt_ph_agua" class="form-control">
                             <div class="input-group-text" onclick="window.open('https://drive.google.com/file/d/1tijwdLdN8xSuS4j2yonYi1jcJGC_jH7O/view')">
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="col-12 mt-3">
-                        <label class="control-titulo">Conductividad del agua <i class="text-warning bi bi-lightning-charge-fill"></i></label>
+                        <label class="control-titulo">Water Conductivity <i class="text-warning bi bi-lightning-charge-fill"></i></label>
                         <div class="input-group w-75">
                             <input type="number" id="txt_conductividad_agua" class="form-control">
                             <div class="input-group-text" onclick="window.open('https://drive.google.com/file/d/1dFu9tgpudxEnaxly2JfI8cMx-8KTmEgT/view')">
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="col-12 mt-3">
-                        <label class="control-titulo">Salinidad de la tierra <i class="text-success fas fa-seedling"></i></label>
+                        <label class="control-titulo">Soil Salinity <i class="text-success fas fa-seedling"></i></label>
                         <div class="input-group w-75">
                             <input type="number" id="txt_salinidad_tierra" class="form-control">
                             <div class="input-group-text" onclick="window.open('https://drive.google.com/file/d/1xGml5kMMakIxRfyWyaQemordff-sjHlo/view')">
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                     <div class="col-12 mt-3">
-                        <label class="control-titulo">Humedad de la tierra <i class="text-primary fas fa-water"></i></label>
+                        <label class="control-titulo">Soil Moisture <i class="text-primary fas fa-water"></i></label>
                         <div class="input-group w-75">
                             <input type="number" id="txt_humedad_tierra" class="form-control">
                             <div class="input-group-text" onclick="window.open('https://drive.google.com/file/d/1i83rxP5FKAW8Gla9RTbjM6uTkIHRY7mI/view')">
@@ -66,10 +66,10 @@
                 </div>
                 <div class="row mb-5">
                     <div class="col-12 mt-3">
-                        <button class="btn btn-success w-100" onclick="location.href = '/Principal'">Guardar</button>
+                        <button class="btn btn-success w-100" onclick="location.href = '/Principal'">Save</button>
                     </div>
                     <div class="col-12 mt-3">
-                        <button class="btn btn-primary w-100">Adquiere kit de medición</button>
+                        <button class="btn btn-primary w-100">Get measurement kit</button>
                     </div>
                 </div>
             </div>

@@ -1,19 +1,19 @@
-Mensaje de Bienvenida de Bobby
+Bobby's Welcome Message
 
-👋 “¡Hola! Soy Bobby, tu lechuguita amiga 🌿. Te doy la bienvenida a este viaje donde aprenderás a sembrar, cuidar y cosechar de manera sostenible. Estaré contigo para darte consejos que te ayudarán a tomar las mejores decisiones para tu cultivo y para el medio ambiente. ¡Recuerda que cada acción cuenta para un futuro más verde y saludable!”
+👋 "Hello! I'm Bobby, your little lettuce friend 🌿. Welcome to this journey where you'll learn to plant, care for, and harvest sustainably. I'll be with you to give you advice that will help you make the best decisions for your crops and for the environment. Remember that every action counts for a greener and healthier future!"
 
-🌾 Consejos de Bobby para la Agricultura Sostenible
+🌾 Bobby's Tips for Sustainable Agriculture
 
-💧 “El agua es vida. Usa el riego de manera inteligente, aprovechando la lluvia y evitando el desperdicio.”
+💧 "Water is life. Use irrigation intelligently, taking advantage of rain and avoiding waste."
 
-🌍 “Cuida el suelo: rota tus cultivos para que no se desgaste y mantén su fertilidad de forma natural.”
+🌍 "Take care of the soil: rotate your crops so they don't wear out and maintain their fertility naturally."
 
-🐞 “No todos los insectos son malos. Algunos son aliados que protegen tus plantas de plagas.”
+🐞 "Not all insects are bad. Some are allies that protect your plants from pests."
 
-🌳 “Los árboles son tus amigos. Mantener áreas verdes ayuda a conservar el agua y a proteger tu finca.”
+🌳 "Trees are your friends. Maintaining green areas helps conserve water and protect your farm."
 
-🌞 “La energía del sol y el clima influyen en tu cosecha. Aprende a usarlos a tu favor con información confiable.”
+🌞 "The energy of the sun and climate influence your harvest. Learn to use them in your favor with reliable information."
 
-🐄 “Si tienes ganado, procura no sobrecargar los pastos. El equilibrio mantiene la tierra fértil.”
+🐄 "If you have livestock, try not to overload the pastures. Balance keeps the land fertile."
 
-🌱 “Recuerda: sembrar de forma sostenible no solo alimenta hoy, también asegura comida para el mañana.”
+🌱 "Remember: planting sustainably not only feeds today, it also ensures food for tomorrow."

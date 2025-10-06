@@ -4,11 +4,11 @@ from utils import tools
 bp = Blueprint('VariablesDeInicio', __name__)
 
 @bp.route('/VariablesDeInicio')
-def variables_inicio():
+def initial_variables():
     return render_template('VariablesDeInicio.html')
 
-@bp.route('/SubirDatos', methods = ['POST'])
-def SubirDatos():
+@bp.route('/UploadData', methods = ['POST'])
+def UploadData():
     try:
         _data: dict = request.get_json()
         

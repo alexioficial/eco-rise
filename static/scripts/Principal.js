@@ -17,7 +17,7 @@ async function Calculate(data) {
     }
     console.log(resp)
 
-    // Llenar los campos con los datos calculados por Gemini
+    // Fill fields with data calculated by Gemini
     if (resp.temperatura_suelo) {
         $('#txt_temperatura_suelo').val(resp.temperatura_suelo);
     }
@@ -28,7 +28,7 @@ async function Calculate(data) {
         $('#txt_probabilidad_lluvia').val(resp.probabilidad_lluvia);
     }
 
-    // Si hay redirect, usarlo
+    // If there's a redirect, use it
     if (resp.redirect) {
         location.href = resp.redirect;
     }
@@ -36,38 +36,38 @@ async function Calculate(data) {
 
 async function ClickCultivos() {
     $('#img_cultivos').click(e => {
-        var elemento = $(`#${e.target.id}`);
-        const cultivo = elemento.attr('alt');
-        switch (cultivo) {
+        var element = $(`#${e.target.id}`);
+        const crop = element.attr('alt');
+        switch (crop) {
             case 'tierra_sola':
-                elemento.attr('src', '/static/imgs/cultivos_1.png');
-                elemento.attr('alt', 'cultivos_1');
+                element.attr('src', '/static/imgs/cultivos_1.png');
+                element.attr('alt', 'cultivos_1');
                 break;
             case 'cultivos_1':
-                elemento.attr('src', '/static/imgs/cultivos_2.png');
-                elemento.attr('alt', 'cultivos_2');
+                element.attr('src', '/static/imgs/cultivos_2.png');
+                element.attr('alt', 'cultivos_2');
                 break;
             case 'cultivos_2':
-                elemento.attr('src', '/static/imgs/lechuga.png');
-                elemento.attr('alt', 'lechuga');
+                element.attr('src', '/static/imgs/lechuga.png');
+                element.attr('alt', 'lechuga');
                 break;
             case 'lechuga':
-                elemento.attr('src', '/static/imgs/tomate.png');
-                elemento.attr('alt', 'tomate');
+                element.attr('src', '/static/imgs/tomate.png');
+                element.attr('alt', 'tomate');
                 break;
             case 'tomate':
-                elemento.attr('src', '/static/imgs/maiz.png');
-                elemento.attr('alt', 'maiz');
+                element.attr('src', '/static/imgs/maiz.png');
+                element.attr('alt', 'maiz');
                 break;
             case 'maiz':
-                elemento.attr('src', '/static/imgs/tierra_sola.png');
-                elemento.attr('alt', 'tierra_sola');
+                element.attr('src', '/static/imgs/tierra_sola.png');
+                element.attr('alt', 'tierra_sola');
                 break;
         }
     });
 }
 
-async function PonerFechaHoy() {
+async function SetTodayDate() {
     const today = new Date();
 
     const year = today.getFullYear();
@@ -85,24 +85,24 @@ async function PonerFechaHoy() {
     $("#txt_fecha").val(formattedDate);
 }
 
-async function Cargar() {
+async function Load() {
     while (true) {
         try {
-            const ancho = parseFloat(getCookie('vi_ancho')) || null;
-            const alto = parseFloat(getCookie('vi_alto')) || null;
-            const tipoPlanta = getCookie('vi_tipoPlanta') || '';
+            const width = parseFloat(getCookie('vi_ancho')) || null;
+            const height = parseFloat(getCookie('vi_alto')) || null;
+            const plantType = getCookie('vi_tipoPlanta') || '';
             const lat = parseFloat(getCookie('vi_lat')) || null;
             const lng = parseFloat(getCookie('vi_lng')) || null;
 
             // await Calculate({
-            //     ancho: ancho,
-            //     alto: alto,
-            //     tipo_planta: tipoPlanta,
+            //     ancho: width,
+            //     alto: height,
+            //     tipo_planta: plantType,
             //     lat: lat,
             //     lng: lng
             // });
             ClickCultivos();
-            PonerFechaHoy();
+            SetTodayDate();
 
             break;
         } catch (error) {
@@ -113,5 +113,5 @@ async function Cargar() {
 }
 
 $(() => {
-    Cargar();
+    Load();
 });

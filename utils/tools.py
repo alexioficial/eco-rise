@@ -1,53 +1,53 @@
 from typing import Union, Any
 from datetime import datetime
 from bson import ObjectId
-from utils.conexion import log_col, GenerarUuid
+from utils.conexion import log_col, GenerateUuid
 import sys
 
 
-def escribir_log(msg: Union[str, Exception] = "", status: Union[int, str] = 0):
+def write_log(msg: Union[str, Exception] = "", status: Union[int, str] = 0):
     """
-    Almacena un mensaje de log en la base de datos.
+    Stores a log message in the database.
 
     Args:
-        msg: Mensaje a escribir en el log
-        status: Estado del log (0: éxito, 1 o 'error': error, 2 o 'warning': advertencia)
+        msg: Message to write to log
+        status: Log status (0: success, 1 or 'error': error, 2 or 'warning': warning)
     """
-    es_error = (
+    is_error = (
         status == 1 or str(status).lower() == "error" or isinstance(msg, Exception)
     )
-    es_warning = status == 2 or str(status).lower() == "warning"
+    is_warning = status == 2 or str(status).lower() == "warning"
 
-    if es_error:
-        tipo = "error"
-        color = "\033[91m"  # Rojo
-    elif es_warning:
-        tipo = "warning"
-        color = "\033[93m"  # Naranja
+    if is_error:
+        log_type = "error"
+        color = "\033[91m"  # Red
+    elif is_warning:
+        log_type = "warning"
+        color = "\033[93m"  # Orange
     else:
-        tipo = "exito"
-        color = "\033[92m"  # Verde
+        log_type = "success"
+        color = "\033[92m"  # Green
 
     timestamp = datetime.now()
-    mensaje = str(msg)
+    message = str(msg)
 
-    # Crear documento de log
+    # Create log document
     log_doc = {
-        "idlog": GenerarUuid(),
-        "fecha_hora": timestamp,
-        "tipo": tipo,
-        "mensaje": f"[{timestamp.strftime('%Y-%m-%d %H:%M:%S')}] {mensaje}\n",
+        "log_id": GenerateUuid(),
+        "timestamp": timestamp,
+        "type": log_type,
+        "message": f"[{timestamp.strftime('%Y-%m-%d %H:%M:%S')}] {message}\n",
     }
 
-    # Insertar en la base de datos
+    # Insert into database
     log_col.insert_one(log_doc)
 
-    # Mantener la salida en consola para debugging
-    mensaje_formateado = f"[{timestamp.strftime('%Y-%m-%d %H:%M:%S')}] {mensaje}\n"
+    # Keep console output for debugging
+    formatted_message = f"[{timestamp.strftime('%Y-%m-%d %H:%M:%S')}] {message}\n"
     if color:
-        print(f"{color}{mensaje_formateado}\033[0m", end="")
+        print(f"{color}{formatted_message}\033[0m", end="")
     else:
-        print(mensaje_formateado, end="")
+        print(formatted_message, end="")
 
 
 def msg(
@@ -57,7 +57,7 @@ def msg(
         print("\033[91m" + str(msg) + "\033[0m")
 
     if log:
-        escribir_log(msg, status)
+        write_log(msg, status)
 
     # Convert Exception to string for JSON serialization
     msg_str = str(msg) if isinstance(msg, Exception) else msg
@@ -69,22 +69,22 @@ def msg_err(exception: Exception):
     return msg(1, exception, log=True)
 
 
-def parse_ids(datos: Union[dict, list]):
-    if isinstance(datos, dict):
-        return {k: str(v) if isinstance(v, ObjectId) else v for k, v in datos.items()}
-    return [parse_ids(item) for item in datos]
+def parse_ids(data: Union[dict, list]):
+    if isinstance(data, dict):
+        return {k: str(v) if isinstance(v, ObjectId) else v for k, v in data.items()}
+    return [parse_ids(item) for item in data]
 
 
-def ruta_abs(ruta_relativa: str):
-    ruta_relativa = ruta_relativa.replace("\\", "/")
-    ruta_relativa = (
-        ("/" + ruta_relativa) if not ruta_relativa.startswith("/") else ruta_relativa
+def abs_path(relative_path: str):
+    relative_path = relative_path.replace("\\", "/")
+    relative_path = (
+        ("/" + relative_path) if not relative_path.startswith("/") else relative_path
     )
-    return sys.path[0] + ruta_relativa
+    return sys.path[0] + relative_path
 
 
-def t_int(valor: Any):
+def t_int(value: Any):
     try:
-        return int(valor)
+        return int(value)
     except Exception:
         return 0

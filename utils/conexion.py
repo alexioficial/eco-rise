@@ -22,9 +22,9 @@ worker_col = db["worker"]
 client_col = db["client"]
 
 
-def GenerarUuid(secuencias=1) -> str:
+def GenerateUuid(sequences=1) -> str:
     result = ""
-    for _ in range(secuencias):
+    for _ in range(sequences):
         result += uuid4().hex
     return result
 
