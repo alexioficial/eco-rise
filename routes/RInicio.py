@@ -4,6 +4,8 @@ bp = Blueprint("Inicio", __name__)
 
 @bp.route("/")
 def Inicio():
+    if request.cookies.get("demo_mode") == "1":
+        return redirect("/VariablesDeInicio")
     # If demo mode is explicitly requested via query string, set cookie and allow entry
     if request.args.get("demo_mode") == "1":
         resp = make_response(redirect("/VariablesDeInicio"))
@@ -18,10 +20,6 @@ def Inicio():
             httponly=False,
         )
         return resp
-
-    # If cookie exists, allow entry (send user to the app's initial page)
-    if request.cookies.get("demo_mode") == "1":
-        return redirect("/VariablesDeInicio")
 
     # Otherwise, redirect to public site
     return redirect("https://eco-rise.surge.sh")
