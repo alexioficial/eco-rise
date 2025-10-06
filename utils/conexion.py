@@ -22,6 +22,7 @@ worker_col = db["worker"]
 client_col = db["client"]
 main_variables_col = db["main-variables"]
 field_data_col = db["field-data"]
+calculated_data_col = db["data"]
 
 
 def GenerateUuid(sequences=1) -> str:

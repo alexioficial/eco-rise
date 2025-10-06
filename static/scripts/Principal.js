@@ -14,7 +14,10 @@ async function Calculate() {
         $('#txt_demanda_producto').val(resp.demanda_producto);
     }
     if (resp.probabilidad_lluvia) {
-        $('#txt_probabilidad_lluvia').val(resp.probabilidad_lluvia);
+        $('#txt_probabilidad_lluvia').val(resp.probabilidad_lluvia + '%');
+    }
+    if (resp.efectividad_cultivo) {
+        $('.porcentaje_efectividad').text(resp.efectividad_cultivo + '%');
     }
 
     // If there's a redirect, use it
@@ -55,6 +58,50 @@ async function Calculate() {
 //         }
 //     });
 // }
+
+async function GetAdvice() {
+    // Show modal with loading state
+    const modal = new bootstrap.Modal(document.getElementById('adviceModal'));
+    modal.show();
+
+    // Reset to loading state
+    $('#adviceContent').html(`
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Analyzing your crop data...</p>
+        </div>
+    `);
+
+    try {
+        const resp = await tools.PostBack('/GetAdvice', {});
+
+        if (resp.status === 1) {
+            $('#adviceContent').html(`
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> ${resp.msg}
+                </div>
+            `);
+            return;
+        }
+
+        // Display advice
+        $('#adviceContent').html(`
+            <div class="text-start w-100">
+                <p class="mb-0" style="line-height: 1.6;">${resp.advice}</p>
+            </div>
+        `);
+
+    } catch (error) {
+        console.error('Error getting advice:', error);
+        $('#adviceContent').html(`
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-triangle"></i> Error getting advice. Please try again.
+            </div>
+        `);
+    }
+}
 
 async function SetTodayDate() {
     const today = new Date();

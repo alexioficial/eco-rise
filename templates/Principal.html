@@ -24,7 +24,7 @@
                 <div class="row">
                     <div class="col-6">
                         <label title="Soil temperature." class="fs-6 text-bold">Temperature (F°)</label>
-                        <input type="text" id="txt_temperatura_suelo" value="75.2" class="form-control fs-6" disabled>
+                        <input type="text" id="txt_temperatura_suelo" class="form-control fs-6" disabled>
                     </div>
                     <div class="col-6">
                         <label class="fs-6 text-bold">Soil Type</label>
@@ -32,22 +32,23 @@
                             <option value="1">Sandy</option>
                             <option value="2">Clay</option>
                             <option value="3">Silty</option>
-                            <option value="4" selected>Loam</option>
+                            <option value="4">Loam</option>
                         </select>
                     </div>
                     <div class="col-6">
                         <label class="fs-6 text-bold">Product Demand</label>
-                        <input type="text" id="txt_demanda_producto" class="form-control fs-6" value="High" disabled>
+                        <input type="text" id="txt_demanda_producto" class="form-control fs-6" disabled>
                     </div>
                     <div class="col-6">
                         <label class="fs-6 text-bold">Rain Probability</label>
-                        <input type="text" id="txt_probabilidad_lluvia" value="Medium" class="form-control fs-6" disabled>
+                        <input type="text" id="txt_probabilidad_lluvia" class="form-control fs-6" disabled>
                     </div>
                 </div>
                 <img src="/static/imgs/tierra_sola.png" id="img_cultivos" style="width: 100%;" alt="tierra_sola">
                 <div class="row">
                     <div class="col-12">
-                        <h4 style="text-decoration: underline;">Crop Effectiveness:</h4>
+                        <h4 style="text-decoration: underline; cursor: pointer;" onclick="GetAdvice()"
+                            title="Click for advice">Crop Effectiveness:</h4>
                         <h1 class="porcentaje_efectividad">80%</h1>
                     </div>
                 </div>
@@ -55,15 +56,95 @@
                     <div class="col-12">
                         <label class="fs-5" title="Crop projection date">Date</label>
                         <input type="date" id="txt_fecha" class="form-control mb-2 fs-5">
-                        <button type="button" class="btn btn-primary w-100" onclick="window.open('https://drive.google.com/file/d/1bh9I_et3Om-avqXIT-Wgmdi2kHCQ51qw/view')">Advice</button>
+                        <button type="button" class="btn btn-primary w-100" onclick="GetAdvice()">Advice</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal for AI Advice -->
+<div class="modal fade" id="adviceModal" tabindex="-1" aria-labelledby="adviceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success bg-opacity-10">
+                <h5 class="modal-title" id="adviceModalLabel">🌱 Bobby's Crop Improvement Advice</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3 text-center mb-3 mb-md-0">
+                        <img src="/static/imgs/bobby.png" alt="Bobby" class="img-fluid" style="max-width: 150px; border-radius: 10px;">
+                        <p class="text-muted small mt-2 mb-0"><strong>Bobby</strong></p>
+                        <p class="text-muted small">Farm Assistant</p>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="speech-bubble">
+                            <div id="adviceContent" class="text-center">
+                                <div class="spinner-border text-success" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-3 mb-0">Analyzing your crop data...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.speech-bubble {
+    position: relative;
+    background: #f8f9fa;
+    border: 2px solid #198754;
+    border-radius: 15px;
+    padding: 20px;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+}
+
+.speech-bubble:before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 30px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 20px 10px 0;
+    border-color: transparent #198754 transparent transparent;
+}
+
+.speech-bubble:after {
+    content: '';
+    position: absolute;
+    left: -16px;
+    top: 32px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 8px 16px 8px 0;
+    border-color: transparent #f8f9fa transparent transparent;
+}
+
+@media (max-width: 768px) {
+    .speech-bubble:before,
+    .speech-bubble:after {
+        left: 50%;
+        top: -20px;
+        transform: translateX(-50%) rotate(90deg);
+    }
+}
+</style>
 {% endblock %}
 
 {% block scripts %}
 <script src="/static/scripts/Principal.js"></script>
-{% endblock %}
+{% endblock scripts %}
