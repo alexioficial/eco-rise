@@ -29,8 +29,8 @@
                 <div class="row">
                     <div class="col-12">
                         <label class="control-titulo">Water pH <i class="text-primary bi bi-droplet-half"></i></label>
-                        <div class="input-group w-75">
-                            <input type="number" id="txt_ph_agua" class="form-control">
+                        <div class="input-group">
+                            <input type="number" id="txt_ph_agua" class="form-control" value="{{ field_data.water_ph or '' }}">
                             <div class="input-group-text" onclick="window.open('https://drive.google.com/file/d/1tijwdLdN8xSuS4j2yonYi1jcJGC_jH7O/view')">
                                 <i class="fa fa-question"></i>
                             </div>
@@ -38,8 +38,8 @@
                     </div>
                     <div class="col-12 mt-3">
                         <label class="control-titulo">Water Conductivity <i class="text-warning bi bi-lightning-charge-fill"></i></label>
-                        <div class="input-group w-75">
-                            <input type="number" id="txt_conductividad_agua" class="form-control">
+                        <div class="input-group">
+                            <input type="number" id="txt_conductividad_agua" class="form-control" value="{{ field_data.water_conductivity or '' }}">
                             <div class="input-group-text" onclick="window.open('https://drive.google.com/file/d/1dFu9tgpudxEnaxly2JfI8cMx-8KTmEgT/view')">
                                 <i class="fa fa-question"></i>
                             </div>
@@ -47,8 +47,8 @@
                     </div>
                     <div class="col-12 mt-3">
                         <label class="control-titulo">Soil Salinity <i class="text-success fas fa-seedling"></i></label>
-                        <div class="input-group w-75">
-                            <input type="number" id="txt_salinidad_tierra" class="form-control">
+                        <div class="input-group">
+                            <input type="number" id="txt_salinidad_tierra" class="form-control" value="{{ field_data.soil_salinity or '' }}">
                             <div class="input-group-text" onclick="window.open('https://drive.google.com/file/d/1xGml5kMMakIxRfyWyaQemordff-sjHlo/view')">
                                 <i class="fa fa-question"></i>
                             </div>
@@ -56,8 +56,8 @@
                     </div>
                     <div class="col-12 mt-3">
                         <label class="control-titulo">Soil Moisture <i class="text-primary fas fa-water"></i></label>
-                        <div class="input-group w-75">
-                            <input type="number" id="txt_humedad_tierra" class="form-control">
+                        <div class="input-group">
+                            <input type="number" id="txt_humedad_tierra" class="form-control" value="{{ field_data.soil_moisture or '' }}">
                             <div class="input-group-text" onclick="window.open('https://drive.google.com/file/d/1i83rxP5FKAW8Gla9RTbjM6uTkIHRY7mI/view')">
                                 <i class="fa fa-question"></i>
                             </div>
@@ -66,10 +66,10 @@
                 </div>
                 <div class="row mb-5">
                     <div class="col-12 mt-3">
-                        <button class="btn btn-success w-100" onclick="location.href = '/Principal'">Save</button>
+                        <button type="button" class="btn btn-success w-100" id="btn-save-field-data">Save</button>
                     </div>
                     <div class="col-12 mt-3">
-                        <button class="btn btn-primary w-100">Get measurement kit</button>
+                        <button type="button" class="btn btn-primary w-100">Get measurement kit</button>
                     </div>
                 </div>
             </div>
@@ -80,5 +80,5 @@
 
 {% block scripts %}
 <script src="/static/fontawesome/js/all.min.js"></script>
-<script src="/static/scripts/Principal.js"></script>
+<script src="/static/scripts/DatosDeCampo.js"></script>
 {% endblock scripts %}

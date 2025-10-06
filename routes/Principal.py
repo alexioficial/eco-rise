@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for
+from utils.conexion import main_variables_col, field_data_col
 # from flask import request
 # import json
 # import re
@@ -12,7 +13,35 @@ bp = Blueprint("Principal", __name__)
 
 @bp.route("/Principal")
 def Principal():
-    return render_template("Principal.html")
+    try:
+        # Load main variables from database
+        main_data = main_variables_col.find_one({}, {"_id": 0})
+        
+        # If no main variables exist, redirect to initial setup
+        if not main_data:
+            return redirect(url_for('VariablesDeInicio.initial_variables'))
+        
+        # Load field data if available
+        field_data = field_data_col.find_one({}, {"_id": 0})
+        
+        # Clean up timestamps
+        if main_data and "updated_at" in main_data:
+            del main_data["updated_at"]
+        if field_data and "updated_at" in field_data:
+            del field_data["updated_at"]
+        
+        return render_template(
+            "Principal.html",
+            main_data=main_data or {},
+            field_data=field_data or {}
+        )
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        return render_template(
+            "Principal.html",
+            main_data={},
+            field_data={}
+        )
 
 
 # @bp.route("/Calculate", methods=["POST"])

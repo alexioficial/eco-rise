@@ -1,15 +1,5 @@
-async function Load() {
-    while (true) {
-        try {
-            
-            break;
-        } catch (error) {
-            console.log(error);
-            await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-    }
-}
-
+// Data is already loaded from backend and populated in HTML
+// No need to fetch again on page load
 $(() => {
-    Load();
+    console.log('VariablesDeInicio page loaded');
 });

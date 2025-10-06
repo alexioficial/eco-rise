@@ -20,6 +20,8 @@ log_col = db["log_col"]
 boss_col = db["boss"]
 worker_col = db["worker"]
 client_col = db["client"]
+main_variables_col = db["main-variables"]
+field_data_col = db["field-data"]
 
 
 def GenerateUuid(sequences=1) -> str:

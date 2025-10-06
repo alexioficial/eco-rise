@@ -37,13 +37,13 @@
                         <div class="col-6">
                             <label for="ancho" class="form-label">WIDTH (m)</label>
                             <input type="number" step="0.01" min="0" class="form-control" id="ancho"
-                                placeholder="Ex: 50" required>
+                                placeholder="Ex: 50" value="{{ main_data.width or '' }}" required>
                             <div class="invalid-feedback">Enter a valid width.</div>
                         </div>
                         <div class="col-6">
                             <label for="alto" class="form-label">LENGTH (m)</label>
                             <input type="number" step="0.01" min="0" class="form-control" id="alto" placeholder="Ex: 30"
-                                required>
+                                value="{{ main_data.length or '' }}" required>
                             <div class="invalid-feedback">Enter a valid length.</div>
                         </div>
                     </div>
@@ -51,10 +51,10 @@
                     <div class="mb-3">
                         <label for="tipoPlanta" class="form-label">Plant Type</label>
                         <select id="tipoPlanta" class="form-select" required>
-                            <option value="" selected disabled>Select an option</option>
-                            <option value="tomate">Tomato</option>
-                            <option value="maiz">Corn</option>
-                            <option value="lechuga">Lettuce</option>
+                            <option value="" {% if not main_data.plant_type %}selected{% endif %} disabled>Select an option</option>
+                            <option value="tomate" {% if main_data.plant_type == 'tomate' %}selected{% endif %}>Tomato</option>
+                            <option value="maiz" {% if main_data.plant_type == 'maiz' %}selected{% endif %}>Corn</option>
+                            <option value="lechuga" {% if main_data.plant_type == 'lechuga' %}selected{% endif %}>Lettuce</option>
                         </select>
                         <div class="invalid-feedback">Select a plant type.</div>
                     </div>
@@ -65,12 +65,12 @@
                         </div>
                         <div class="col-6">
                             <input type="text" inputmode="decimal" class="form-control" id="lat" placeholder="Latitude"
-                                required>
+                                value="{{ '%.6f'|format(main_data.latitude) if main_data.latitude else '' }}" required>
                             <div class="invalid-feedback">Invalid latitude.</div>
                         </div>
                         <div class="col-6">
                             <input type="text" inputmode="decimal" class="form-control" id="lng" placeholder="Longitude"
-                                required>
+                                value="{{ '%.6f'|format(main_data.longitude) if main_data.longitude else '' }}" required>
                             <div class="invalid-feedback">Invalid longitude.</div>
                         </div>
                     </div>
@@ -133,35 +133,36 @@
         let marker = null;
         let pickedLatLng = null;
 
-        // Cookie helpers
-        const setCookie = (name, value, days = 7) => {
-            const d = new Date();
-            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
-            const expires = 'expires=' + d.toUTCString();
-            document.cookie = `${name}=${encodeURIComponent(value)}; ${expires}; path=/; samesite=Lax`;
-        };
-
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!form.checkValidity()) {
                 form.classList.add('was-validated');
                 return;
             }
             const data = {
-                ancho: document.getElementById('ancho').value,
-                alto: document.getElementById('alto').value,
-                tipoPlanta: document.getElementById('tipoPlanta').value,
+                width: document.getElementById('ancho').value,
+                length: document.getElementById('alto').value,
+                plant_type: document.getElementById('tipoPlanta').value,
                 lat: latEl.value,
                 lng: lngEl.value,
             };
             console.log('Main data', data);
-            // Save to cookies to be read in Main
-            setCookie('vi_ancho', data.ancho);
-            setCookie('vi_alto', data.alto);
-            setCookie('vi_tipoPlanta', data.tipoPlanta);
-            setCookie('vi_lat', data.lat);
-            setCookie('vi_lng', data.lng);
-            window.location.href = '/Principal';
+            
+            // Save to database
+            try {
+                const resp = await tools.PostBack('/SaveMainVariables', data);
+                if (resp.status === 0) {
+                    notification.success('Data saved successfully');
+                    setTimeout(() => {
+                        window.location.href = '/Principal';
+                    }, 500);
+                } else {
+                    notification.error(resp.msg || 'Error saving data');
+                }
+            } catch (error) {
+                console.error('Error saving data:', error);
+                notification.error('Error saving data');
+            }
         });
 
         document.getElementById('btn-geolocate').addEventListener('click', () => {
