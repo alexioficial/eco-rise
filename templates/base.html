@@ -29,6 +29,51 @@
 </head>
 
 <body class="bg-light">
+    <script>
+        (function () {
+            function setCookie(name, value, days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                const expires = "; expires=" + date.toUTCString();
+                document.cookie = name + "=" + (value || "") + expires + "; path=/; samesite=Lax";
+            }
+
+            function getCookie(name) {
+                const nameEQ = name + "=";
+                const ca = document.cookie.split(';');
+                for (let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+
+            try {
+                const url = new URL(window.location.href);
+                const demoParam = url.searchParams.get('demo_mode');
+
+                if (demoParam === '1') {
+                    // Persist demo access and clean the URL
+                    setCookie('demo_mode', '1', 7);
+                    url.searchParams.delete('demo_mode');
+                    const cleanUrl = url.pathname + (url.searchParams.toString() ? ('?' + url.searchParams.toString()) : '') + url.hash;
+                    window.history.replaceState({}, document.title, cleanUrl);
+                } else {
+                    // If no cookie, bounce to public site
+                    const hasDemo = getCookie('demo_mode') === '1';
+                    if (!hasDemo) {
+                        window.location.replace('https://eco-rise.surge.sh');
+                    }
+                }
+            } catch (e) {
+                // If URL parsing fails for some reason, be conservative and redirect
+                if (getCookie('demo_mode') !== '1') {
+                    window.location.replace('https://eco-rise.surge.sh');
+                }
+            }
+        })();
+    </script>
     <main class="container py-3" style="padding-bottom: 12rem;">
         {% block content %}{% endblock %}
     </main>
